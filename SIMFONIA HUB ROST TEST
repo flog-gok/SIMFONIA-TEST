@@ -133,49 +133,6 @@ FPSFrame.BackgroundTransparency = 1
 FPSFrame.Parent = Frame
 FPSFrame.Visible = false
 
--- Элементы для Rage
-local HeadButton = Instance.new("TextButton")
-HeadButton.Size = UDim2.new(0, 200, 0, 40)
-HeadButton.Position = UDim2.new(0, 0, 0, 0)
-HeadButton.Text = "hitbox expander: OFF"
-HeadButton.TextColor3 = Color3.fromRGB(255, 255, 0)
-HeadButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-HeadButton.TextSize = 18
-HeadButton.Parent = RageFrame
-
-local HeadStroke = Instance.new("UIStroke")
-HeadStroke.Thickness = 2
-HeadStroke.Color = Color3.fromRGB(100, 100, 100)
-HeadStroke.Parent = HeadButton
-
-local SizeInput = Instance.new("TextBox")
-SizeInput.Size = UDim2.new(0, 100, 0, 30)
-SizeInput.Position = UDim2.new(0, 0, 0, 50)
-SizeInput.Text = "10"
-SizeInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-SizeInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-SizeInput.TextSize = 16
-SizeInput.Parent = RageFrame
-
-local SizeStroke = Instance.new("UIStroke")
-SizeStroke.Thickness = 2
-SizeStroke.Color = Color3.fromRGB(100, 100, 100)
-SizeStroke.Parent = SizeInput
-
-local BodyButton = Instance.new("TextButton")
-BodyButton.Size = UDim2.new(0, 200, 0, 40)
-BodyButton.Position = UDim2.new(0, 0, 0, 90)
-BodyButton.Text = "body expander: OFF"
-BodyButton.TextColor3 = Color3.fromRGB(255, 255, 0)
-BodyButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-BodyButton.TextSize = 18
-BodyButton.Parent = RageFrame
-
-local BodyStroke = Instance.new("UIStroke")
-BodyStroke.Thickness = 2
-BodyStroke.Color = Color3.fromRGB(100, 100, 100)
-BodyStroke.Parent = BodyButton
-
 local SilentAimButton = Instance.new("TextButton")
 SilentAimButton.Size = UDim2.new(0, 200, 0, 40)
 SilentAimButton.Position = UDim2.new(0, 220, 0, 0)
@@ -576,20 +533,6 @@ FlyStroke.Thickness = 2
 FlyStroke.Color = Color3.fromRGB(100, 100, 100)
 FlyStroke.Parent = FlyButton
 
-local FreecamButton = Instance.new("TextButton")
-FreecamButton.Size = UDim2.new(0, 200, 0, 40)
-FreecamButton.Position = UDim2.new(0, 0, 0, 50)
-FreecamButton.Text = "Freecam: OFF"
-FreecamButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-FreecamButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-FreecamButton.TextSize = 18
-FreecamButton.Parent = MiscFrame
-
-local FreecamStroke = Instance.new("UIStroke")
-FreecamStroke.Thickness = 2
-FreecamStroke.Color = Color3.fromRGB(100, 100, 100)
-FreecamStroke.Parent = FreecamButton
-
 local NoclipButton = Instance.new("TextButton")
 NoclipButton.Size = UDim2.new(0, 200, 0, 40)
 NoclipButton.Position = UDim2.new(0, 0, 0, 90)
@@ -732,13 +675,10 @@ TextureLevelStroke.Color = Color3.fromRGB(100, 100, 100)
 TextureLevelStroke.Parent = TextureLevelButton
 
 -- Переменные
-local isHeadEnabled = false
-local isBodyEnabled = false
 local isESPEnabled = false
 local isNamesEnabled = false
 local isHealthEnabled = false
 local isFlyEnabled = false
-local isFreecamEnabled = false
 local isStudsEnabled = false
 local isNoclipEnabled = false
 local isSpeedhackEnabled = false
@@ -756,7 +696,6 @@ local studsLabels = {}
 local nameLabels = {}
 local hpLabels = {}
 local flyConnection
-local freecamConnection
 local noclipConnection
 local speedhackBind = nil
 local speedhackSpeed = 20
@@ -789,54 +728,6 @@ local isNoclipV2Enabled = false
 local noclipV2Connection
 -- Инициализация поведения мыши
 UIS.MouseBehavior = Enum.MouseBehavior.Default
-
--- Функция обновления голов
-local function updateHeads(enable)
-	for _, player in pairs(game.Players:GetPlayers()) do
-		if player ~= game.Players.LocalPlayer and player.Character then
-			local head = player.Character:FindFirstChild("Head")
-			if head then
-				if enable then
-					head.Size = Vector3.new(currentSize, currentSize, currentSize)
-					head.Transparency = 0.5
-					head.Color = Color3.fromRGB(255, 0, 0)
-					head.CanCollide = false
-					head.Anchored = false
-				else
-					head.Size = Vector3.new(2, 1, 1)
-					head.Transparency = 0
-					head.Color = Color3.fromRGB(255, 255, 255)
-					head.CanCollide = true
-					head.Anchored = false
-				end
-			end
-		end
-	end
-end
-
--- Функция обновления тела
-local function updateBodies(enable)
-	for _, player in pairs(game.Players:GetPlayers()) do
-		if player ~= game.Players.LocalPlayer and player.Character then
-			local rootPart = player.Character:FindFirstChild("HumanoidRootPart")
-			if rootPart then
-				if enable then
-					rootPart.Size = Vector3.new(currentSize, currentSize, currentSize)
-					rootPart.Transparency = 0.5
-					rootPart.Color = Color3.fromRGB(255, 0, 0)
-					rootPart.CanCollide = false
-					rootPart.Anchored = false
-				else
-					rootPart.Size = Vector3.new(2, 5, 1)
-					rootPart.Transparency = 0
-					rootPart.Color = Color3.fromRGB(255, 255, 255)
-					rootPart.CanCollide = true
-					rootPart.Anchored = false
-				end
-			end
-		end
-	end
-end
 
 -- Функция создания визуальных элементов для игрока
 local function createPlayerVisuals(player)
@@ -1022,91 +913,6 @@ local function toggleFly(enable)
 		end
 		humanoid.WalkSpeed = 16
 		rootPart.Velocity = Vector3.new(0, 0, 0)
-	end
-end
-
--- Функция Freecam
-local function toggleFreecam(enable)
-	local player = game.Players.LocalPlayer
-	local camera = workspace.CurrentCamera
-
-	if enable then
-		originalCameraCFrame = camera.CFrame
-		camera.CameraType = Enum.CameraType.Scriptable
-
-		local lookVector = camera.CFrame.LookVector
-		yaw = math.atan2(lookVector.X, lookVector.Z)
-		pitch = math.asin(lookVector.Y)
-
-		local speed = 50
-		local mouseSensitivity = 0.2
-
-		if not Frame.Visible then
-			UIS.MouseBehavior = Enum.MouseBehavior.LockCenter
-		end
-
-		freecamConnection = RunService.RenderStepped:Connect(function(dt)
-			local moveDirection = Vector3.new(0, 0, 0)
-
-			if UIS:IsKeyDown(Enum.KeyCode.W) then
-				moveDirection = moveDirection + camera.CFrame.LookVector
-			end
-			if UIS:IsKeyDown(Enum.KeyCode.S) then
-				moveDirection = moveDirection - camera.CFrame.LookVector
-			end
-			if UIS:IsKeyDown(Enum.KeyCode.D) then
-				moveDirection = moveDirection + camera.CFrame.RightVector
-			end
-			if UIS:IsKeyDown(Enum.KeyCode.A) then
-				moveDirection = moveDirection - camera.CFrame.RightVector
-			end
-			if UIS:IsKeyDown(Enum.KeyCode.Space) then
-				moveDirection = moveDirection + Vector3.new(0, 1, 0)
-			end
-			if UIS:IsKeyDown(Enum.KeyCode.LeftShift) then
-				moveDirection = moveDirection - Vector3.new(0, 1, 0)
-			end
-
-			if moveDirection.Magnitude > 0 then
-				moveDirection = moveDirection.Unit * speed * dt
-				camera.CFrame = camera.CFrame + moveDirection
-			end
-		end)
-
-		local mouseConnection
-		mouseConnection = UIS.InputChanged:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseMovement then
-				local delta = input.Delta
-				yaw = yaw - delta.X * mouseSensitivity * 0.01
-				pitch = math.clamp(pitch - delta.Y * mouseSensitivity * 0.01, -math.pi / 2 + 0.1, math.pi / 2 - 0.1)
-				camera.CFrame = CFrame.new(camera.CFrame.Position) * CFrame.Angles(0, yaw, 0) * CFrame.Angles(pitch, 0, 0)
-			end
-		end)
-
-		FreecamButton.MouseButton1Click:Connect(function()
-			if not isFreecamEnabled then
-				mouseConnection:Disconnect()
-				if Frame.Visible then
-					UIS.MouseBehavior = Enum.MouseBehavior.Default
-				else
-					UIS.MouseBehavior = Enum.MouseBehavior.LockCenter
-				end
-			end
-		end)
-	else
-		if freecamConnection then
-			freecamConnection:Disconnect()
-			freecamConnection = nil
-		end
-		camera.CameraType = Enum.CameraType.Custom
-		if Frame.Visible then
-			UIS.MouseBehavior = Enum.MouseBehavior.Default
-		else
-			UIS.MouseBehavior = Enum.MouseBehavior.LockCenter
-		end
-		if originalCameraCFrame then
-			camera.CFrame = originalCameraCFrame
-		end
 	end
 end
 
@@ -1661,7 +1467,7 @@ local function toggleCrosshair(mode)
 
 		-- "Крюки" обратной свастики
 		local hook1 = Drawing.new("Line") -- Верхний левый
-		hook1.Thickness = 2
+		hook1.Thickness = 3
 		hook1.Color = Color3.fromRGB(255, 255, 255)
 		hook1.From = Vector2.new(centerX - size, centerY)
 		hook1.To = Vector2.new(centerX - size, centerY + size / 2)
@@ -1669,7 +1475,7 @@ local function toggleCrosshair(mode)
 		table.insert(crosshairLines, hook1)
 
 		local hook2 = Drawing.new("Line") -- Нижний левый
-		hook2.Thickness = 2
+		hook2.Thickness = 3
 		hook2.Color = Color3.fromRGB(255, 255, 255)
 		hook2.From = Vector2.new(centerX + size, centerY)
 		hook2.To = Vector2.new(centerX + size, centerY - size / 2)
@@ -1677,7 +1483,7 @@ local function toggleCrosshair(mode)
 		table.insert(crosshairLines, hook2)
 
 		local hook3 = Drawing.new("Line") -- Верхний правый
-		hook3.Thickness = 2
+		hook3.Thickness = 3
 		hook3.Color = Color3.fromRGB(255, 255, 255)
 		hook3.From = Vector2.new(centerX, centerY - size)
 		hook3.To = Vector2.new(centerX - size / 2, centerY - size)
@@ -1685,7 +1491,7 @@ local function toggleCrosshair(mode)
 		table.insert(crosshairLines, hook3)
 
 		local hook4 = Drawing.new("Line") -- Нижний правый
-		hook4.Thickness = 2
+		hook4.Thickness = 3
 		hook4.Color = Color3.fromRGB(255, 255, 255)
 		hook4.From = Vector2.new(centerX, centerY + size)
 		hook4.To = Vector2.new(centerX + size / 2, centerY + size)
@@ -1838,14 +1644,7 @@ FPSButton.MouseButton1Click:Connect(function()
 	FPSFrame.Visible = true
 end)
 
--- Логика кнопок
-HeadButton.MouseButton1Click:Connect(function()
-	isHeadEnabled = not isHeadEnabled
-	HeadButton.Text = isHeadEnabled and "hitbox expander: ON" or "hitbox expander: OFF"
-	HeadButton.TextColor3 = Color3.fromRGB(255, 255, 0)
-	updateHeads(isHeadEnabled)
-end)
-
+--логика кнопок
 AimbotButton.MouseButton1Click:Connect(function()
     isAimbotEnabled = not isAimbotEnabled
     AimbotButton.Text = isAimbotEnabled and "Aimbot: ON" or "Aimbot: OFF"
@@ -1914,13 +1713,6 @@ AimbotSpeedDownButton.MouseButton1Click:Connect(function()
         aimbotSpeed = aimbotSpeed - 10
         AimbotSpeedLabel.Text = "Speed: " .. aimbotSpeed .. "%"
     end
-end)
-
-BodyButton.MouseButton1Click:Connect(function()
-	isBodyEnabled = not isBodyEnabled
-	BodyButton.Text = isBodyEnabled and "body expander: ON" or "body expander: OFF"
-	BodyButton.TextColor3 = Color3.fromRGB(255, 255, 0)
-	updateBodies(isBodyEnabled)
 end)
 
 SilentAimButton.MouseButton1Click:Connect(function()
@@ -2274,28 +2066,6 @@ for _, player in pairs(game.Players:GetPlayers()) do
 	end
 end
 
--- Обработка новых игроков
-game.Players.PlayerAdded:Connect(function(player)
-	if player == game.Players.LocalPlayer then return end
-	player.CharacterAdded:Connect(function(character)
-		local head = character:WaitForChild("Head", 5)
-		local rootPart = character:WaitForChild("HumanoidRootPart", 5)
-
-		if head and isHeadEnabled then
-			head.Size = Vector3.new(currentSize, currentSize, currentSize)
-			head.Transparency = 0.5
-			head.Color = Color3.fromRGB(255, 0, 0)
-			head.CanCollide = false
-			head.Anchored = false
-		end
-
-		if rootPart and isBodyEnabled then
-			rootPart.Size = Vector3.new(currentSize, currentSize, currentSize)
-			rootPart.Transparency = 0.5
-			rootPart.Color = Color3.fromRGB(255, 0, 0)
-			rootPart.CanCollide = false
-			rootPart.Anchored = false
-		end
 
 		if isESPEnabled or isNamesEnabled or isHealthEnabled then
 			createPlayerVisuals(player)
