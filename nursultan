@@ -1,127 +1,137 @@
--- NursultanLib/ui.lua
+-- // NursultanLib (main module)
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local Lighting = game:GetService("Lighting")
 
-local lib = {}
-local isOpen = false
+local NursultanLib = {}
+NursultanLib.__index = NursultanLib
 
-local function randomString(len)
+-- Executor check
+local badExecutors = {
+	Xeno = true,
+	Solara = true,
+	Fluxus = true,
+	Krnl = true,
+	Electron = true
+}
+local function getExecutorName()
+	if identifyexecutor then return identifyexecutor()
+	elseif getexecutorname then return getexecutorname()
+	elseif isexecutorname then return isexecutorname()
+	else return "Unknown" end
+end
+if badExecutors[getExecutorName()] then
+	game.Players.LocalPlayer:Kick("Unsupported executor: " .. getExecutorName())
+	return
+end
+
+-- Random string
+local function rstr(len)
 	local s = ""
-	for i = 1, len do
-		s = s .. string.char(math.random(65, 90))
+	for _ = 1, len do
+		s = s .. string.char(math.random(65, 122))
 	end
 	return s
 end
 
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = randomString(10)
-screenGui.ResetOnSpawn = false
-screenGui.IgnoreGuiInset = true
-screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+-- Init UI
+function NursultanLib:CreateWindow(titleText)
+	local self = setmetatable({}, NursultanLib)
 
-if gethui then
-	local protect = syn and syn.protect_gui or protectgui or function(x) return x end
-	screenGui = protect(screenGui)
-	screenGui.Parent = gethui()
-else
-	game.Players.LocalPlayer:Kick("Unsupported executor.")
+	-- GUI
+	local gui = Instance.new("ScreenGui")
+	gui.Name = rstr(10)
+	gui.IgnoreGuiInset = true
+	gui.ResetOnSpawn = false
+	gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+	-- Protect & Parent to gethui only
+	local protect = (syn and syn.protect_gui) or protectgui or function(x) return x end
+	gui = protect(gui)
+	if not gethui then error("Executor doesn't support gethui()") end
+	gui.Parent = gethui()
+
+	-- Blur (optional)
+	pcall(function()
+		if not Lighting:FindFirstChild("NursultanBlur") then
+			local blur = Instance.new("BlurEffect", Lighting)
+			blur.Name = "NursultanBlur"
+			blur.Size = 12
+		end
+	end)
+
+	-- Main Frame
+	local main = Instance.new("Frame")
+	main.Name = rstr(8)
+	main.Size = UDim2.new(0, 600, 0, 400)
+	main.Position = UDim2.new(0.5, -300, 0.5, -200)
+	main.AnchorPoint = Vector2.new(0.5, 0.5)
+	main.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+	main.BackgroundTransparency = 0.1
+	main.Visible = false
+	main.Parent = gui
+
+	Instance.new("UICorner", main).CornerRadius = UDim.new(0, 10)
+
+	-- Title
+	local title = Instance.new("TextLabel", main)
+	title.Text = titleText or "Nursultan UI"
+	title.Size = UDim2.new(1, 0, 0, 30)
+	title.BackgroundTransparency = 1
+	title.TextColor3 = Color3.fromRGB(255, 255, 255)
+	title.Font = Enum.Font.GothamBold
+	title.TextSize = 16
+
+	self.Main = main
+	self.GUI = gui
+
+	-- Toggle on Shift
+	local open = false
+	UserInputService.InputBegan:Connect(function(i, gpe)
+		if gpe then return end
+		if i.KeyCode == Enum.KeyCode.LeftShift then
+			open = not open
+			if open then
+				main.Visible = true
+				main.Size = UDim2.new(0, 0, 0, 0)
+				main.Position = UDim2.new(0.5, 0, 0.5, 0)
+				TweenService:Create(main, TweenInfo.new(0.25), {
+					Size = UDim2.new(0, 600, 0, 400),
+					Position = UDim2.new(0.5, -300, 0.5, -200)
+				}):Play()
+			else
+				TweenService:Create(main, TweenInfo.new(0.25), {
+					Size = UDim2.new(0, 0, 0, 0),
+					Position = UDim2.new(0.5, 0, 0.5, 0)
+				}):Play()
+				task.wait(0.25)
+				main.Visible = false
+			end
+		end
+	end)
+
+	return self
 end
 
-pcall(function()
-	if not Lighting:FindFirstChild("NursultanBlur") then
-		local blur = Instance.new("BlurEffect")
-		blur.Name = "NursultanBlur"
-		blur.Size = 12
-		blur.Parent = Lighting
-	end
-end)
+-- Create button in a given frame
+function NursultanLib:CreateButton(text, callback)
+	local btn = Instance.new("TextButton")
+	btn.Size = UDim2.new(0, 200, 0, 30)
+	btn.Position = UDim2.new(0, 20, 0, 60 + math.random(0, 200)) -- offset per button
+	btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	btn.Text = text or "Click Me"
+	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+	btn.Font = Enum.Font.Gotham
+	btn.TextSize = 14
+	btn.Parent = self.Main
 
-local mainFrame = Instance.new("Frame")
-mainFrame.Name = randomString(8)
-mainFrame.Size = UDim2.new(0, 600, 0, 400)
-mainFrame.Position = UDim2.new(0.5, -300, 0.5, -200)
-mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-mainFrame.BackgroundTransparency = 0.1
-mainFrame.Visible = false
-mainFrame.Parent = screenGui
+	Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
 
-local corner = Instance.new("UICorner", mainFrame)
-corner.CornerRadius = UDim.new(0, 12)
-
-function lib:CreateFrame(name)
-	local frame = Instance.new("Frame")
-	frame.Name = randomString(8)
-	frame.Size = UDim2.new(0, 120, 0, 120)
-	frame.Position = UDim2.new(0, math.random(30, 400), 0, math.random(20, 200))
-	frame.BackgroundColor3 = Color3.fromRGB(math.random(60, 100), 60, 100)
-	frame.BackgroundTransparency = 0.1
-	frame.Parent = mainFrame
-
-	local corner = Instance.new("UICorner", frame)
-	corner.CornerRadius = UDim.new(0, 8)
-
-	local label = Instance.new("TextLabel")
-	label.Text = name
-	label.Size = UDim2.new(1, 0, 0, 24)
-	label.BackgroundTransparency = 1
-	label.TextColor3 = Color3.new(1, 1, 1)
-	label.Font = Enum.Font.Code
-	label.TextScaled = true
-	label.Parent = frame
-
-	return frame
-end
-
-function lib:Toggle()
-	isOpen = not isOpen
-	if isOpen then
-		mainFrame.Visible = true
-		mainFrame.Size = UDim2.new(0, 0, 0, 0)
-		mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-		TweenService:Create(mainFrame, TweenInfo.new(0.3), {
-			Size = UDim2.new(0, 600, 0, 400),
-			Position = UDim2.new(0.5, -300, 0.5, -200)
-		}):Play()
-	else
-		TweenService:Create(mainFrame, TweenInfo.new(0.3), {
-			Size = UDim2.new(0, 0, 0, 0),
-			Position = UDim2.new(0.5, 0, 0.5, 0)
-		}):Play()
-		task.wait(0.3)
-		mainFrame.Visible = false
-	end
-end
-
-function lib:Notify(text)
-	local msg = Instance.new("TextLabel")
-	msg.Size = UDim2.new(0, 300, 0, 40)
-	msg.Position = UDim2.new(0.5, -150, 0, -50)
-	msg.AnchorPoint = Vector2.new(0.5, 0)
-	msg.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-	msg.TextColor3 = Color3.new(1, 1, 1)
-	msg.Font = Enum.Font.Code
-	msg.TextScaled = true
-	msg.Text = text
-	msg.Parent = screenGui
-
-	local corner = Instance.new("UICorner", msg)
-	corner.CornerRadius = UDim.new(0, 6)
-
-	TweenService:Create(msg, TweenInfo.new(0.3), {Position = UDim2.new(0.5, -150, 0, 20)}):Play()
-	task.delay(2.5, function()
-		TweenService:Create(msg, TweenInfo.new(0.3), {Position = UDim2.new(0.5, -150, 0, -50)}):Play()
-		task.wait(0.3)
-		msg:Destroy()
+	btn.MouseButton1Click:Connect(function()
+		if callback then
+			pcall(callback)
+		end
 	end)
 end
 
-UserInputService.InputBegan:Connect(function(input, gpe)
-	if gpe then return end
-	if input.KeyCode == Enum.KeyCode.LeftShift then
-		lib:Toggle()
-	end
-end)
-
-return lib
+return NursultanLib
