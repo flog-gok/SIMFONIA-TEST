@@ -1,0 +1,127 @@
+-- NursultanLib/ui.lua
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local Lighting = game:GetService("Lighting")
+
+local lib = {}
+local isOpen = false
+
+local function randomString(len)
+	local s = ""
+	for i = 1, len do
+		s = s .. string.char(math.random(65, 90))
+	end
+	return s
+end
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = randomString(10)
+screenGui.ResetOnSpawn = false
+screenGui.IgnoreGuiInset = true
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+if gethui then
+	local protect = syn and syn.protect_gui or protectgui or function(x) return x end
+	screenGui = protect(screenGui)
+	screenGui.Parent = gethui()
+else
+	game.Players.LocalPlayer:Kick("Unsupported executor.")
+end
+
+pcall(function()
+	if not Lighting:FindFirstChild("NursultanBlur") then
+		local blur = Instance.new("BlurEffect")
+		blur.Name = "NursultanBlur"
+		blur.Size = 12
+		blur.Parent = Lighting
+	end
+end)
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = randomString(8)
+mainFrame.Size = UDim2.new(0, 600, 0, 400)
+mainFrame.Position = UDim2.new(0.5, -300, 0.5, -200)
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+mainFrame.BackgroundTransparency = 0.1
+mainFrame.Visible = false
+mainFrame.Parent = screenGui
+
+local corner = Instance.new("UICorner", mainFrame)
+corner.CornerRadius = UDim.new(0, 12)
+
+function lib:CreateFrame(name)
+	local frame = Instance.new("Frame")
+	frame.Name = randomString(8)
+	frame.Size = UDim2.new(0, 120, 0, 120)
+	frame.Position = UDim2.new(0, math.random(30, 400), 0, math.random(20, 200))
+	frame.BackgroundColor3 = Color3.fromRGB(math.random(60, 100), 60, 100)
+	frame.BackgroundTransparency = 0.1
+	frame.Parent = mainFrame
+
+	local corner = Instance.new("UICorner", frame)
+	corner.CornerRadius = UDim.new(0, 8)
+
+	local label = Instance.new("TextLabel")
+	label.Text = name
+	label.Size = UDim2.new(1, 0, 0, 24)
+	label.BackgroundTransparency = 1
+	label.TextColor3 = Color3.new(1, 1, 1)
+	label.Font = Enum.Font.Code
+	label.TextScaled = true
+	label.Parent = frame
+
+	return frame
+end
+
+function lib:Toggle()
+	isOpen = not isOpen
+	if isOpen then
+		mainFrame.Visible = true
+		mainFrame.Size = UDim2.new(0, 0, 0, 0)
+		mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+		TweenService:Create(mainFrame, TweenInfo.new(0.3), {
+			Size = UDim2.new(0, 600, 0, 400),
+			Position = UDim2.new(0.5, -300, 0.5, -200)
+		}):Play()
+	else
+		TweenService:Create(mainFrame, TweenInfo.new(0.3), {
+			Size = UDim2.new(0, 0, 0, 0),
+			Position = UDim2.new(0.5, 0, 0.5, 0)
+		}):Play()
+		task.wait(0.3)
+		mainFrame.Visible = false
+	end
+end
+
+function lib:Notify(text)
+	local msg = Instance.new("TextLabel")
+	msg.Size = UDim2.new(0, 300, 0, 40)
+	msg.Position = UDim2.new(0.5, -150, 0, -50)
+	msg.AnchorPoint = Vector2.new(0.5, 0)
+	msg.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	msg.TextColor3 = Color3.new(1, 1, 1)
+	msg.Font = Enum.Font.Code
+	msg.TextScaled = true
+	msg.Text = text
+	msg.Parent = screenGui
+
+	local corner = Instance.new("UICorner", msg)
+	corner.CornerRadius = UDim.new(0, 6)
+
+	TweenService:Create(msg, TweenInfo.new(0.3), {Position = UDim2.new(0.5, -150, 0, 20)}):Play()
+	task.delay(2.5, function()
+		TweenService:Create(msg, TweenInfo.new(0.3), {Position = UDim2.new(0.5, -150, 0, -50)}):Play()
+		task.wait(0.3)
+		msg:Destroy()
+	end)
+end
+
+UserInputService.InputBegan:Connect(function(input, gpe)
+	if gpe then return end
+	if input.KeyCode == Enum.KeyCode.LeftShift then
+		lib:Toggle()
+	end
+end)
+
+return lib
