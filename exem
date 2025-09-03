@@ -32,7 +32,7 @@ function Utilities:Create(Inst, Properties, Childs)
     local BlacklistedProps = {
         BorderSizePixel = 0,
         Text = "",
-        BackgroundColor3 = Color3.fromRGB(20, 20, 20) -- Background color
+        BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black background
     }
 
     for blprop, v in pairs(BlacklistedProps) do
@@ -92,18 +92,18 @@ end
 
 --// Colors --//
 local Colors = {
-    Primary = Color3.fromRGB(20, 20, 20), -- Background
-    Secondary = Color3.fromRGB(40, 40, 40), -- Black-gray for dropdowns/buttons
-    Tertiary = Color3.fromRGB(60, 60, 60), -- Dark gray for tertiary elements
-    Divider = Color3.fromRGB(80, 80, 80), -- Dark gray for lines/strokes
-    AccentDivider = Color3.fromRGB(100, 100, 100), -- Slightly lighter gray
+    Primary = Color3.fromRGB(0, 0, 0), -- Black background
+    Secondary = Color3.fromRGB(50, 50, 50), -- Dark gray for secondary elements
+    Tertiary = Color3.fromRGB(100, 100, 100), -- Medium gray for tertiary elements
+    Divider = Color3.fromRGB(255, 255, 255), -- White for dividers/strokes
+    AccentDivider = Color3.fromRGB(200, 200, 200), -- Light gray for accent dividers
     PrimaryText = Color3.fromRGB(255, 255, 255), -- White text
-    SecondaryText = Color3.fromRGB(200, 200, 200), -- Light gray text
-    TertiaryText = Color3.fromRGB(150, 150, 150), -- Medium gray text
-    Hovering = Color3.fromRGB(92, 114, 255), -- Blue for active buttons/sliders
-    Accent = Color3.fromRGB(92, 114, 255), -- Blue for sliders/active elements
-    DarkerAccent = Color3.fromRGB(72, 94, 235), -- Darker blue for variations
-    AccentText = Color3.fromRGB(255, 255, 255) -- White text for active elements
+    SecondaryText = Color3.fromRGB(200, 200, 200), -- Light gray for secondary text
+    TertiaryText = Color3.fromRGB(150, 150, 150), -- Medium gray for tertiary text
+    Hovering = Color3.fromRGB(180, 180, 180), -- Light gray for hover/active buttons
+    Accent = Color3.fromRGB(255, 255, 255), -- White for sliders and active elements
+    DarkerAccent = Color3.fromRGB(200, 200, 200), -- Light gray for accent variations
+    AccentText = Color3.fromRGB(0, 0, 0) -- Black text for accent elements
 }
 --//
 
@@ -124,7 +124,7 @@ function library:Window(WindowArgs)
     }, {
         Utilities:Create("Frame", {
             Name = "Main",
-            Size = UDim2.new(0, 700, 0, 600), -- Reduced width, increased height
+            Size = UDim2.new(0, 800, 0, 500),
             BackgroundColor3 = Colors.Primary,
             ClipsDescendants = true,
             Position = UDim2.new(0, 600, 0, 270)
@@ -139,9 +139,9 @@ function library:Window(WindowArgs)
             }),
             Utilities:Create("Frame", {
                 Name = "Containers",
-                Size = UDim2.new(1, 0, 1, -64), -- Adjusted for taller tabs
+                Size = UDim2.new(1, 0, 1, -50),
                 BackgroundTransparency = 1,
-                Position = UDim2.new(0, 0, 0, 48)
+                Position = UDim2.new(0, 0, 0, 32)
             }),
             Utilities:Create("Frame", {
                 Name = "Bottom",
@@ -202,7 +202,7 @@ function library:Window(WindowArgs)
                 AnchorPoint = Vector2.new(.5, 0),
                 Position = UDim2.new(.5, 0, 0, 0),
                 BackgroundColor3 = Colors.Secondary,
-                Size = UDim2.new(1, 0, 0, 48) -- Taller tabs
+                Size = UDim2.new(1, 0, 0, 32)
             }, {
                 Utilities:Create("Frame", {
                     Name = "Divider",
@@ -214,7 +214,7 @@ function library:Window(WindowArgs)
                 }),
                 Utilities:Create("Frame", {
                     Name = "TabContainer",
-                    Size = UDim2.new(1, 0, 0, 48), -- Taller tabs
+                    Size = UDim2.new(1, 0, 0, 32),
                     BackgroundTransparency = 1,
                     ClipsDescendants = true
                 }, {
@@ -364,7 +364,7 @@ function library:Window(WindowArgs)
         task.spawn(function()
             for _, v in pairs(TabContainer:GetChildren()) do
                 if v.ClassName == "Frame" then
-                    v.Size = UDim2.new(TabSize, 0, 0, 48) -- Taller tabs
+                    v.Size = UDim2.new(TabSize, 0, 0, 32)
                 end
             end
         end)
@@ -372,8 +372,8 @@ function library:Window(WindowArgs)
 
     local function Resize()
         local MouseLocation = Utilities:GetMouse()
-        local X = math.clamp(MouseLocation.X - Window.Main.AbsolutePosition.X, 350, 1400) -- Adjusted for narrower window
-        local Y = math.clamp(MouseLocation.Y - Window.Main.AbsolutePosition.Y, 300, 1000) -- Adjusted for taller window
+        local X = math.clamp(MouseLocation.X - Window.Main.AbsolutePosition.X, 400, 1600)
+        local Y = math.clamp(MouseLocation.Y - Window.Main.AbsolutePosition.Y, 200, 900)
 
         SizeX.Value = X
         SizeY.Value = Y
@@ -451,7 +451,7 @@ function library:Window(WindowArgs)
         local Tab = Utilities:Create("Frame", {
             Name = "Tab",
             Parent = TabContainer,
-            Size = UDim2.new(0, 200, 0, 48), -- Taller tabs
+            Size = UDim2.new(0, 200, 0, 32),
             BackgroundTransparency = 1,
         }, {
             Utilities:Create("Frame", {
@@ -503,7 +503,7 @@ function library:Window(WindowArgs)
             ClipsDescendants = false,
             ScrollBarThickness = 0,
             Parent = ContainerHolder,
-            Size = UDim2.new(.5, 0, 0, 540) -- Adjusted for taller window
+            Size = UDim2.new(.5, 0, 0, 450)
         }, {
             Utilities:Create("UIListLayout"),
             Utilities:Create("UIPadding", {
@@ -521,8 +521,8 @@ function library:Window(WindowArgs)
             ClipsDescendants = false,
             ScrollBarThickness = 0,
             Parent = ContainerHolder,
-            Size = UDim2.new(.5, 0, 0, 540), -- Adjusted for taller window
-            Position = UDim2.new(0, 350, 0, 0) -- Adjusted for narrower window
+            Size = UDim2.new(.5, 0, 0, 450),
+            Position = UDim2.new(0, 400, 0, 0)
         }, {
             Utilities:Create("UIListLayout"),
             Utilities:Create("UIPadding", {
@@ -586,11 +586,11 @@ function library:Window(WindowArgs)
                 Parent = SectionArgs.Side == "Left" and Left or Right,
                 BackgroundColor3 = Colors.Primary,
                 BackgroundTransparency = 1,
-                Size = UDim2.new(0, 336, 0, 36) -- Adjusted for narrower window
+                Size = UDim2.new(0, 386, 0, 36)
             }, {
                 Utilities:Create("TextLabel", {
                     Name = "SectionText",
-                    Size = UDim2.new(0, 336, 0, 26),
+                    Size = UDim2.new(0, 386, 0, 26),
                     Text = SectionArgs.Text,
                     TextXAlignment = Enum.TextXAlignment.Left,
                     TextSize = 14,
@@ -603,12 +603,12 @@ function library:Window(WindowArgs)
                 Utilities:Create("Frame", {
                     Name = "Divider",
                     Position = UDim2.new(0, 0, 0, 28),
-                    Size = UDim2.new(0, 336, 0, 1),
+                    Size = UDim2.new(0, 386, 0, 1),
                     BackgroundColor3 = Colors.Divider
                 }),
                 Utilities:Create("Frame", {
                     Name = "Container",
-                    Size = UDim2.new(0, 336, 0, 0),
+                    Size = UDim2.new(0, 386, 0, 0),
                     BackgroundTransparency = 1,
                     Position = UDim2.new(0, 0, 0, 38)
                 }, {
@@ -630,8 +630,8 @@ function library:Window(WindowArgs)
 
             SectionContainer.ChildAdded:Connect(function()
                 SectionY = SectionY + 21
-                Section.Size = UDim2.new(0, SizeX.Value / 2 - 14, 0, SectionY)
-                SectionContainer.Size = UDim2.new(0, SizeX.Value / 2 - 14, 0, SectionY)
+                Section.Size = UDim2.new(0, 386, 0, SectionY)
+                SectionContainer.Size = UDim2.new(0, 386, 0, SectionY)
             end)
 
             function SectionTable:Check(CheckArgs)
@@ -647,7 +647,7 @@ function library:Window(WindowArgs)
                 local Check = Utilities:Create("Frame", {
                     Name = "Check",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 336, 0, 21),
+                    Size = UDim2.new(0, 386, 0, 21),
                     BackgroundTransparency = 1,
                 }, {
                     Utilities:Create("TextButton", {
@@ -714,13 +714,13 @@ function library:Window(WindowArgs)
                     end
 
                     if State then
-                        Utilities:Tween(Check.CheckFrame.UIStroke, .125, {Color = Colors.Hovering})
-                        Utilities:Tween(Check.CheckFrame.CheckInner, .125, {BackgroundColor3 = Colors.Hovering})
+                        Utilities:Tween(Check.CheckFrame.UIStroke, .125, {Color = Colors.Accent})
+                        Utilities:Tween(Check.CheckFrame.CheckInner, .125, {BackgroundColor3 = Colors.Accent})
                     else
                         Utilities:Tween(Check.CheckFrame.UIStroke, .125, {Color = Colors.Divider})
                         Utilities:Tween(Check.CheckFrame.CheckInner, .125, {BackgroundColor3 = Colors.Secondary})
                     end
-                end)
+                end
 
                 CheckButton.MouseButton1Click:Connect(function()
                     State = not State
@@ -737,7 +737,7 @@ function library:Window(WindowArgs)
                 local Button = Utilities:Create("Frame", {
                     Name = "Button",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 336, 0, 21),
+                    Size = UDim2.new(0, 386, 0, 21),
                     BackgroundTransparency = 1
                 }, {
                     Utilities:Create("Frame", {
@@ -784,7 +784,7 @@ function library:Window(WindowArgs)
                 Button.ButtonFrame.Size = UDim2.new(0, TextX + 10, 0, 14)
 
                 Button.ButtonFrame.ButtonButton.MouseButton1Down:Connect(function()
-                    Utilities:Tween(Button.ButtonFrame.UIStroke, .1, {Color = Colors.Hovering})
+                    Utilities:Tween(Button.ButtonFrame.UIStroke, .1, {Color = Colors.Accent})
                     Utilities:Tween(Button.ButtonFrame.ButtonText, .1, {TextColor3 = Colors.AccentText})
                 end)
 
@@ -836,7 +836,7 @@ function library:Window(WindowArgs)
                 local Slider = Utilities:Create("Frame", {
                     Name = "Slider",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 336, 0, 21),
+                    Size = UDim2.new(0, 386, 0, 21),
                     BackgroundTransparency = 1
                 }, {
                     Utilities:Create("Frame", {
@@ -945,7 +945,7 @@ function library:Window(WindowArgs)
                 local Label = Utilities:Create("Frame", {
                     Name = "Label",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 336, 0, 21),
+                    Size = UDim2.new(0, 386, 0, 21),
                     BackgroundTransparency = 1
                 }, {
                     Utilities:Create("TextLabel", {
@@ -954,7 +954,7 @@ function library:Window(WindowArgs)
                         TextColor3 = Info.Color,
                         RichText = true,
                         BackgroundTransparency = 1,
-                        Size = UDim2.new(0, 336, 0, 14),
+                        Size = UDim2.new(0, 386, 0, 14),
                         TextXAlignment = Enum.TextXAlignment.Left,
                         TextSize = 13,
                         Font = Enum.Font.SourceSansBold
@@ -990,7 +990,7 @@ function library:Window(WindowArgs)
                     Name = "Dropdown",
                     BackgroundTransparency = 1,
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 336, 0, 21)
+                    Size = UDim2.new(0, 386, 0, 21)
                 }, {
                     Utilities:Create("Frame", {
                         Name = "DropdownFrame",
@@ -1011,7 +1011,7 @@ function library:Window(WindowArgs)
                             RichText = true,
                             Position = UDim2.new(0, 4, 0, 0),
                             TextSize = 13,
-                            TextColor3 = Colors.PrimaryText,
+                            TextColor3 = Colors.TertiaryText,
                             Font = Enum.Font.SourceSansBold,
                             ZIndex = DropdownTable.Index
                         }),
@@ -1024,10 +1024,10 @@ function library:Window(WindowArgs)
                         Utilities:Create("Frame", {
                             Name = "DropdownContainer",
                             Size = UDim2.new(1, 0, 0, 0),
-                            BackgroundColor3 = Colors.Secondary,
+                            BackgroundTransparency = 1,
                             ClipsDescendants = true,
                             Position = UDim2.new(0, 0, 0, 14),
-                            ZIndex = DropoutTable.Index
+                            ZIndex = DropdownTable.Index
                         }, {
                             Utilities:Create("UIListLayout")
                         }),
@@ -1036,7 +1036,7 @@ function library:Window(WindowArgs)
                             Size = UDim2.new(0, 20, 0, 14),
                             BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                             Position = UDim2.new(1, -41, 0, 0),
-                            ZIndex = DropoutTable.Index
+                            ZIndex = DropdownTable.Index
                         }, {
                             Utilities:Create("UIGradient", {
                                 Color = ColorSequence.new({
@@ -1054,7 +1054,7 @@ function library:Window(WindowArgs)
                             Size = UDim2.new(0, 21, 0, 14),
                             BackgroundColor3 = Colors.Tertiary,
                             Position = UDim2.new(1, -21, 0, 0),
-                            ZIndex = DropoutTable.Index
+                            ZIndex = DropdownTable.Index
                         }, {
                             Utilities:Create("UIStroke", {
                                 Color = Colors.Divider
@@ -1067,7 +1067,7 @@ function library:Window(WindowArgs)
                                 Image = getcustomasset("KERNITH/Arrow.png"),
                                 AnchorPoint = Vector2.new(.5, .5),
                                 Position = UDim2.new(.5, 0, .5, 0),
-                                ZIndex = DropoutTable.Index
+                                ZIndex = DropdownTable.Index
                             })
                         })
                     })
@@ -1078,33 +1078,33 @@ function library:Window(WindowArgs)
                     Dropdown.Size = UDim2.new(0, Size, 0, 21)
                 end)
 
-                Dropout.DropdownFrame.MouseEnter:Connect(function()
+                Dropdown.DropdownFrame.MouseEnter:Connect(function()
                     if not State then
-                        Utilities:Tween(Dropout.DropdownFrame, .125, {BackgroundColor3 = Colors.Hovering})
+                        Utilities:Tween(Dropdown.DropdownFrame, .125, {BackgroundColor3 = Colors.Hovering})
                     end
                 end)
 
-                Dropout.DropdownFrame.MouseLeave:Connect(function()
+                Dropdown.DropdownFrame.MouseLeave:Connect(function()
                     if not State then
-                        Utilities:Tween(Dropout.DropdownFrame, .125, {BackgroundColor3 = Colors.Secondary})
+                        Utilities:Tween(Dropdown.DropdownFrame, .125, {BackgroundColor3 = Colors.Secondary})
                     end
                 end)
 
-                local DropoutContainer = Dropout.DropdownFrame.DropoutContainer
-                local DropoutImage = Dropout.DropdownFrame.DropoutImageContainer.DropoutImage
+                local DropdownContainer = Dropdown.DropdownFrame.DropdownContainer
+                local DropdownImage = Dropdown.DropdownFrame.DropdownImageContainer.DropdownImage
 
-                function DropoutTable:Toggle(bool)
+                function DropdownTable:Toggle(bool)
                     State = bool
 
                     if State then
-                        Utilities:Tween(Dropout.DropdownFrame, .2, {BackgroundColor3 = Colors.Secondary})
-                        DropoutContainer.Size = DropoutContainer.Size + UDim2.fromOffset(0, DropoutY)
-                        Dropout.DropdownFrame.Size = Dropout.DropdownFrame.Size + UDim2.fromOffset(0, DropoutY)
-                        DropoutImage.Rotation = 90
+                        Utilities:Tween(Dropdown.DropdownFrame, .2, {BackgroundColor3 = Colors.Secondary})
+                        DropdownContainer.Size = DropdownContainer.Size + UDim2.fromOffset(0, DropdownY)
+                        Dropdown.DropdownFrame.Size = Dropdown.DropdownFrame.Size + UDim2.fromOffset(0, DropdownY)
+                        DropdownImage.Rotation = 90
                     else
-                        DropoutContainer.Size = DropoutContainer.Size - UDim2.fromOffset(0, DropoutY)
-                        Dropout.DropdownFrame.Size = Dropout.DropdownFrame.Size - UDim2.fromOffset(0, DropoutY)
-                        DropoutImage.Rotation = 0
+                        DropdownContainer.Size = DropdownContainer.Size - UDim2.fromOffset(0, DropdownY)
+                        Dropdown.DropdownFrame.Size = Dropdown.DropdownFrame.Size - UDim2.fromOffset(0, DropdownY)
+                        DropdownImage.Rotation = 0
                     end
                 end
 
@@ -1114,14 +1114,14 @@ function library:Window(WindowArgs)
                         library[Info.Flag] = Info.Default
                     end
                     if Info.ChangeText then
-                        Dropout.DropdownFrame.DropoutText.Text = Info.Default
+                        Dropdown.DropdownFrame.DropdownText.Text = Info.Default
                     end
                 end
 
-                function DropoutTable:Select(v)
+                function DropdownTable:Select(v)
                     task.spawn(Info.Callback, v)
                     if Info.ChangeText then
-                        Dropout.DropdownFrame.DropoutText.Text = v
+                        Dropdown.DropdownFrame.DropdownText.Text = v
                     end
                 end
 
@@ -1129,66 +1129,66 @@ function library:Window(WindowArgs)
 
                 local function OnPick(v)
                     if Info.Multi then
-                        if not table.find(MultiTable, v.DropoutElementText.Text) then
+                        if not table.find(MultiTable, v.DropdownElementText.Text) then
                             Utilities:Tween(v, .125, {BackgroundTransparency = .95})
-                            Utilities:Tween(v.DropoutElementText, .125, {TextColor3 = Colors.Hovering})
-                            table.insert(MultiTable, v.DropoutElementText.Text)
+                            Utilities:Tween(v.DropdownElementText, .125, {TextColor3 = Colors.Accent})
+                            table.insert(MultiTable, v.DropdownElementText.Text)
                         else
                             Utilities:Tween(v, .125, {BackgroundTransparency = 1})
-                            Utilities:Tween(v.DropoutElementText, .125, {TextColor3 = Colors.PrimaryText})
+                            Utilities:Tween(v.DropdownElementText, .125, {TextColor3 = Colors.PrimaryText})
                             for i, e in pairs(MultiTable) do
-                                if v.DropoutElementText.Text == e then
+                                if v.DropdownElementText.Text == e then
                                     table.remove(MultiTable, i)
                                 end
                             end
                         end
                         task.spawn(Info.Callback, MultiTable)
                         if Info.ChangeText then
-                            Dropout.DropdownFrame.DropoutText.Text = ""
+                            Dropdown.DropdownFrame.DropdownText.Text = ""
                             for i, z in pairs(MultiTable) do
-                                Dropout.DropdownFrame.DropoutText.Text ..= i ~= #MultiTable and z..", " or z
+                                Dropdown.DropdownFrame.DropdownText.Text ..= i ~= #MultiTable and z..", " or z
                             end
-                            if string.len(Dropout.DropdownFrame.DropoutText.Text) == 0 then
-                                Dropout.DropdownFrame.DropoutText.Text = Info.Text
+                            if string.len(Dropdown.DropdownFrame.DropdownText.Text) == 0 then
+                                Dropdown.DropdownFrame.DropdownText.Text = Info.Text
                             end
                         end
                     else
-                        DropoutTable:Select(v.DropoutElementText.Text)
-                        DropoutTable:Toggle(false)
+                        DropdownTable:Select(v.DropdownElementText.Text)
+                        DropdownTable:Toggle(false)
                     end
                 end
 
-                function DropoutTable:Refresh(table)
-                    for _, v in pairs(DropoutContainer:GetChildren()) do
+                function DropdownTable:Refresh(table)
+                    for _, v in pairs(DropdownContainer:GetChildren()) do
                         if v.ClassName == "Frame" then
                             v:Destroy()
-                            DropoutY = DropoutY - 14
+                            DropdownY = DropdownY - 14
                             if State then
-                                DropoutContainer.Size = DropoutContainer.Size - UDim2.fromOffset(0, 14)
-                                Dropout.DropdownFrame.Size = Dropout.DropdownFrame.Size - UDim2.fromOffset(0, 14)
+                                DropdownContainer.Size = DropdownContainer.Size - UDim2.fromOffset(0, 14)
+                                Dropdown.DropdownFrame.Size = Dropdown.DropdownFrame.Size - UDim2.fromOffset(0, 14)
                             end
                         end
                     end
 
                     for _, v in pairs(table) do
                         warn("Set", v)
-                        DropoutTable:Add(v)
+                        DropdownTable:Add(v)
                     end
                 end
 
-                function DropoutTable:Add(str)
-                    DropoutY = DropoutY + 14
+                function DropdownTable:Add(str)
+                    DropdownY = DropdownY + 14
                     if State then
-                        DropoutContainer.Size = DropoutContainer.Size + UDim2.fromOffset(0, 14)
-                        Dropout.DropdownFrame.Size = Dropout.DropdownFrame.Size + UDim2.fromOffset(0, 14)
+                        DropdownContainer.Size = DropdownContainer.Size + UDim2.fromOffset(0, 14)
+                        Dropdown.DropdownFrame.Size = Dropdown.DropdownFrame.Size + UDim2.fromOffset(0, 14)
                     end
 
-                    local DropoutElement = Utilities:Create("Frame", {
+                    local DropdownElement = Utilities:Create("Frame", {
                         Name = "DropdownElement",
                         Size = UDim2.new(1, 0, 0, 14),
-                        Parent = DropoutContainer,
+                        Parent = DropdownContainer,
                         BackgroundTransparency = 1,
-                        ZIndex = DropoutTable.Index
+                        ZIndex = DropdownTable.Index
                     }, {
                         Utilities:Create("TextLabel", {
                             Name = "DropdownElementText",
@@ -1199,46 +1199,46 @@ function library:Window(WindowArgs)
                             RichText = true,
                             TextColor3 = Colors.PrimaryText,
                             Font = Enum.Font.SourceSansBold,
-                            ZIndex = DropoutTable.Index
+                            ZIndex = DropdownTable.Index
                         }),
                         Utilities:Create("TextButton", {
                             Name = "DropdownElementButton",
                             Size = UDim2.new(1, 0, 1, 0),
                             BackgroundTransparency = 1,
-                            ZIndex = DropoutTable.Index
+                            ZIndex = DropdownTable.Index
                         })
                     })
 
-                    DropoutElement.MouseEnter:Connect(function()
-                        if not table.find(MultiTable, DropoutElement.DropoutElementText.Text) then
-                            Utilities:Tween(DropoutElement, .125, {BackgroundTransparency = .95})
-                            Utilities:Tween(DropoutElement.DropoutElementText, .125, {TextColor3 = Colors.Hovering})
+                    DropdownElement.MouseEnter:Connect(function()
+                        if not table.find(MultiTable, DropdownElement.DropdownElementText.Text) then
+                            Utilities:Tween(DropdownElement, .125, {BackgroundTransparency = .95})
+                            Utilities:Tween(DropdownElement.DropdownElementText, .125, {TextColor3 = Colors.Hovering})
                         end
                     end)
 
-                    DropoutElement.MouseLeave:Connect(function()
-                        if not table.find(MultiTable, DropoutElement.DropoutElementText.Text) then
-                            Utilities:Tween(DropoutElement, .125, {BackgroundTransparency = 1})
-                            Utilities:Tween(DropoutElement.DropoutElementText, .125, {TextColor3 = Colors.PrimaryText})
+                    DropdownElement.MouseLeave:Connect(function()
+                        if not table.find(MultiTable, DropdownElement.DropdownElementText.Text) then
+                            Utilities:Tween(DropdownElement, .125, {BackgroundTransparency = 1})
+                            Utilities:Tween(DropdownElement.DropdownElementText, .125, {TextColor3 = Colors.PrimaryText})
                         end
                     end)
 
-                    DropoutElement.DropoutElementButton.MouseButton1Click:Connect(function()
-                        OnPick(DropoutElement)
+                    DropdownElement.DropdownElementButton.MouseButton1Click:Connect(function()
+                        OnPick(DropdownElement)
                     end)
                 end
 
                 for _, v in pairs(Info.List) do
-                    DropoutTable:Add(v)
+                    DropdownTable:Add(v)
                 end
 
-                Dropout.DropdownFrame.DropoutButton.MouseButton1Click:Connect(function()
+                Dropdown.DropdownFrame.DropdownButton.MouseButton1Click:Connect(function()
                     State = not State
-                    DropoutTable:Toggle(State)
+                    DropdownTable:Toggle(State)
                 end)
 
                 DropIndex = DropIndex - 1
-                return DropoutTable
+                return DropdownTable
             end
 
             return SectionTable
