@@ -32,7 +32,7 @@ function Utilities:Create(Inst, Properties, Childs)
     local BlacklistedProps = {
         BorderSizePixel = 0,
         Text = "",
-        BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black background
+        BackgroundColor3 = Color3.fromRGB(30, 30, 35) -- Dark charcoal background
     }
 
     for blprop, v in pairs(BlacklistedProps) do
@@ -92,18 +92,18 @@ end
 
 --// Colors --//
 local Colors = {
-    Primary = Color3.fromRGB(0, 0, 0), -- Black background
-    Secondary = Color3.fromRGB(50, 50, 50), -- Dark gray for secondary elements
-    Tertiary = Color3.fromRGB(100, 100, 100), -- Medium gray for tertiary elements
-    Divider = Color3.fromRGB(255, 255, 255), -- White for dividers/strokes
-    AccentDivider = Color3.fromRGB(200, 200, 200), -- Light gray for accent dividers
-    PrimaryText = Color3.fromRGB(255, 255, 255), -- White text
-    SecondaryText = Color3.fromRGB(200, 200, 200), -- Light gray for secondary text
-    TertiaryText = Color3.fromRGB(150, 150, 150), -- Medium gray for tertiary text
-    Hovering = Color3.fromRGB(180, 180, 180), -- Light gray for hover/active buttons
-    Accent = Color3.fromRGB(255, 255, 255), -- White for sliders and active elements
-    DarkerAccent = Color3.fromRGB(200, 200, 200), -- Light gray for accent variations
-    AccentText = Color3.fromRGB(0, 0, 0) -- Black text for accent elements
+    Primary = Color3.fromRGB(30, 30, 35), -- Dark charcoal for main background
+    Secondary = Color3.fromRGB(50, 50, 55), -- Slightly lighter charcoal for secondary elements
+    Tertiary = Color3.fromRGB(80, 80, 85), -- Medium gray for tertiary elements
+    Divider = Color3.fromRGB(200, 200, 205), -- Soft off-white for strokes/dividers
+    AccentDivider = Color3.fromRGB(160, 160, 165), -- Slightly darker off-white for accent dividers
+    PrimaryText = Color3.fromRGB(220, 220, 225), -- Soft off-white for primary text
+    SecondaryText = Color3.fromRGB(180, 180, 185), -- Light gray for secondary text
+    TertiaryText = Color3.fromRGB(140, 140, 145), -- Medium gray for tertiary text
+    Hovering = Color3.fromRGB(120, 120, 125), -- Subtle gray for hover/active states
+    Accent = Color3.fromRGB(200, 200, 205), -- Soft off-white for sliders and active elements
+    DarkerAccent = Color3.fromRGB(160, 160, 165), -- Slightly darker off-white for accent variations
+    AccentText = Color3.fromRGB(30, 30, 35) -- Dark charcoal for text on active elements
 }
 --//
 
@@ -1131,7 +1131,7 @@ function library:Window(WindowArgs)
                     if Info.Multi then
                         if not table.find(MultiTable, v.DropdownElementText.Text) then
                             Utilities:Tween(v, .125, {BackgroundTransparency = .95})
-                            Utilities:Tween(v.DropdownElementText, .125, {TextColor3 = Colors.Accent})
+                            Utilities:Tween(v.DropdownElementText, .125, {TextColor3 = Colors.Hovering})
                             table.insert(MultiTable, v.DropdownElementText.Text)
                         else
                             Utilities:Tween(v, .125, {BackgroundTransparency = 1})
