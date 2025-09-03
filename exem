@@ -124,7 +124,7 @@ function library:Window(WindowArgs)
     }, {
         Utilities:Create("Frame", {
             Name = "Main",
-            Size = UDim2.new(0, 650, 0, 600),
+            Size = UDim2.new(0, 750, 0, 600), -- Changed line: increased width from 650 to 750
             BackgroundColor3 = Color3.fromRGB(20, 20, 20),
             ClipsDescendants = true,
             Position = UDim2.new(0, 600, 0, 270)
@@ -372,7 +372,7 @@ function library:Window(WindowArgs)
 
     local function Resize()
         local MouseLocation = Utilities:GetMouse()
-        local X = math.clamp(MouseLocation.X - Window.Main.AbsolutePosition.X, 325, 1300)
+        local X = math.clamp(MouseLocation.X - Window.Main.AbsolutePosition.X, 375, 1500) -- Changed line: updated min width from 325 to 375, max width from 1300 to 1500
         local Y = math.clamp(MouseLocation.Y - Window.Main.AbsolutePosition.Y, 300, 1000)
 
         SizeX.Value = X
@@ -477,6 +477,11 @@ function library:Window(WindowArgs)
                 Name = "TabButton",
                 Size = UDim2.new(1, 0, 1, 0),
                 BackgroundTransparency = 1
+            }, {
+                Utilities:Create("UIStroke", { -- Added lines: added black stroke to TabButton
+                    Color = Color3.fromRGB(0, 0, 0),
+                    Thickness = 1
+                })
             })
         })
 
@@ -522,7 +527,7 @@ function library:Window(WindowArgs)
             ScrollBarThickness = 0,
             Parent = ContainerHolder,
             Size = UDim2.new(.5, 0, 0, 546),
-            Position = UDim2.new(0, 325, 0, 0)
+            Position = UDim2.new(0, 375, 0, 0) -- Changed line: updated position from 325 to 375
         }, {
             Utilities:Create("UIListLayout"),
             Utilities:Create("UIPadding", {
@@ -586,11 +591,11 @@ function library:Window(WindowArgs)
                 Parent = SectionArgs.Side == "Left" and Left or Right,
                 BackgroundColor3 = Colors.Secondary,
                 BackgroundTransparency = 1,
-                Size = UDim2.new(0, 311, 0, 36)
+                Size = UDim2.new(0, 361, 0, 36) -- Changed line: increased width from 311 to 361
             }, {
                 Utilities:Create("TextLabel", {
                     Name = "SectionText",
-                    Size = UDim2.new(0, 311, 0, 26),
+                    Size = UDim2.new(0, 361, 0, 26), -- Changed line: increased width from 311 to 361
                     Text = SectionArgs.Text,
                     TextXAlignment = Enum.TextXAlignment.Left,
                     TextSize = 14,
@@ -603,12 +608,12 @@ function library:Window(WindowArgs)
                 Utilities:Create("Frame", {
                     Name = "Divider",
                     Position = UDim2.new(0, 0, 0, 28),
-                    Size = UDim2.new(0, 311, 0, 1),
+                    Size = UDim2.new(0, 361, 0, 1), -- Changed line: increased width from 311 to 361
                     BackgroundColor3 = Colors.Divider
                 }),
                 Utilities:Create("Frame", {
                     Name = "Container",
-                    Size = UDim2.new(0, 311, 0, 0),
+                    Size = UDim2.new(0, 361, 0, 0), -- Changed line: increased width from 311 to 361
                     BackgroundTransparency = 1,
                     Position = UDim2.new(0, 0, 0, 38)
                 }, {
@@ -630,8 +635,8 @@ function library:Window(WindowArgs)
 
             SectionContainer.ChildAdded:Connect(function()
                 SectionY = SectionY + 21
-                Section.Size = UDim2.new(0, 311, 0, SectionY)
-                SectionContainer.Size = UDim2.new(0, 311, 0, SectionY)
+                Section.Size = UDim2.new(0, 361, 0, SectionY) -- Changed line: increased width from 311 to 361
+                SectionContainer.Size = UDim2.new(0, 361, 0, SectionY) -- Changed line: increased width from 311 to 361
             end)
 
             function SectionTable:Check(CheckArgs)
@@ -647,7 +652,7 @@ function library:Window(WindowArgs)
                 local Check = Utilities:Create("Frame", {
                     Name = "Check",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 311, 0, 21),
+                    Size = UDim2.new(0, 361, 0, 21), -- Changed line: increased width from 311 to 361
                     BackgroundTransparency = 1,
                 }, {
                     Utilities:Create("TextButton", {
@@ -737,7 +742,7 @@ function library:Window(WindowArgs)
                 local Button = Utilities:Create("Frame", {
                     Name = "Button",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 311, 0, 21),
+                    Size = UDim2.new(0, 361, 0, 21), -- Changed line: increased width from 311 to 361
                     BackgroundTransparency = 1
                 }, {
                     Utilities:Create("Frame", {
@@ -836,7 +841,7 @@ function library:Window(WindowArgs)
                 local Slider = Utilities:Create("Frame", {
                     Name = "Slider",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 311, 0, 21),
+                    Size = UDim2.new(0, 361, 0, 21), -- Changed line: increased width from 311 to 361
                     BackgroundTransparency = 1
                 }, {
                     Utilities:Create("Frame", {
@@ -945,7 +950,7 @@ function library:Window(WindowArgs)
                 local Label = Utilities:Create("Frame", {
                     Name = "Label",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 311, 0, 21),
+                    Size = UDim2.new(0, 361, 0, 21), -- Changed line: increased width from 311 to 361
                     BackgroundTransparency = 1
                 }, {
                     Utilities:Create("TextLabel", {
@@ -954,7 +959,7 @@ function library:Window(WindowArgs)
                         TextColor3 = Info.Color,
                         RichText = true,
                         BackgroundTransparency = 1,
-                        Size = UDim2.new(0, 311, 0, 14),
+                        Size = UDim2.new(0, 361, 0, 14), -- Changed line: increased width from 311 to 361
                         TextXAlignment = Enum.TextXAlignment.Left,
                         TextSize = 13,
                         Font = Enum.Font.SourceSansBold
@@ -990,7 +995,7 @@ function library:Window(WindowArgs)
                     Name = "Dropdown",
                     BackgroundTransparency = 1,
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 311, 0, 21)
+                    Size = UDim2.new(0, 361, 0, 21) -- Changed line: increased width from 311 to 361
                 }, {
                     Utilities:Create("Frame", {
                         Name = "DropdownFrame",
