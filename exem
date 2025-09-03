@@ -92,18 +92,18 @@ end
 
 --// Colors --//
 local Colors = {
-    Primary = Color3.fromRGB(27, 25, 27),
-    Secondary = Color3.fromRGB(42, 40, 42),
-    Tertiary = Color3.fromRGB(74, 73, 74),
-    Divider = Color3.fromRGB(46, 45, 46),
-    AccentDivider = Color3.fromRGB(54, 54, 54),
-    PrimaryText = Color3.fromRGB(211, 211, 211),
-    SecondaryText = Color3.fromRGB(122, 122, 122),
-    TertiaryText = Color3.fromRGB(158, 158, 158),
-    Hovering = Color3.fromRGB(56, 53, 56),
-    Accent = Color3.fromRGB(100, 190, 31),
-    DarkerAccent = Color3.fromRGB(87, 167, 26),
-    AccentText = Color3.fromRGB(235, 235, 235)
+    Primary = Color3.fromRGB(255, 255, 255), -- White
+    Secondary = Color3.fromRGB(0, 0, 0), -- Black
+    Tertiary = Color3.fromRGB(64, 64, 64), -- Dark Gray
+    Divider = Color3.fromRGB(100, 100, 100), -- Lighter gray for dividers
+    AccentDivider = Color3.fromRGB(120, 120, 120), -- Slightly lighter for accents
+    PrimaryText = Color3.fromRGB(0, 0, 0), -- Black text for contrast on white
+    SecondaryText = Color3.fromRGB(80, 80, 80), -- Darker gray for secondary text
+    TertiaryText = Color3.fromRGB(100, 100, 100), -- Medium gray for tertiary text
+    Hovering = Color3.fromRGB(200, 200, 200), -- Light gray for hover effects
+    Accent = Color3.fromRGB(0, 120, 255), -- Blue accent for contrast
+    DarkerAccent = Color3.fromRGB(0, 100, 200), -- Darker blue for accent variations
+    AccentText = Color3.fromRGB(255, 255, 255) -- White text for accent elements
 }
 --//
 
@@ -131,8 +131,8 @@ function library:Window(WindowArgs)
         }, {
             Utilities:Create("UIGradient", {
                 Color = ColorSequence.new({
-                    ColorSequenceKeypoint.new(0, Color3.fromRGB(27, 25, 27)),
-                    ColorSequenceKeypoint.new(1, Color3.fromRGB(12, 10, 12)),
+                    ColorSequenceKeypoint.new(0, Colors.Primary),
+                    ColorSequenceKeypoint.new(1, Colors.Secondary),
                 }),
                 Offset = Vector2.new(0, 0.65),
                 Rotation = 90
@@ -373,7 +373,7 @@ function library:Window(WindowArgs)
     local function Resize()
         local MouseLocation = Utilities:GetMouse()
         local X = math.clamp(MouseLocation.X - Window.Main.AbsolutePosition.X, 400, 1600)
-        local Y = math.clamp(MouseLocation.Y - Window.Main.AbsolutePosition.Y, 200, 900)
+        local Y = math.clamp(MouseLocation.Y - Window.Main.AbsolutePosition.X, 200, 900)
 
         SizeX.Value = X
         SizeY.Value = Y
@@ -497,7 +497,7 @@ function library:Window(WindowArgs)
             Name = "Left",
             BackgroundTransparency = 1,
             Visible = false,
-            BackgroundColor3 = Color3.fromRGB(167, 54, 54),
+            BackgroundColor3 = Colors.Secondary,
             CanvasSize = UDim2.new(0, 0, 0, 0),
             AutomaticCanvasSize = Enum.AutomaticSize.Y,
             ClipsDescendants = false,
@@ -515,7 +515,7 @@ function library:Window(WindowArgs)
             Name = "Right",
             BackgroundTransparency = 1,
             Visible = false,
-            BackgroundColor3 = Color3.fromRGB(45, 175, 62),
+            BackgroundColor3 = Colors.Secondary,
             CanvasSize = UDim2.new(0, 0, 0, 0),
             AutomaticCanvasSize = Enum.AutomaticSize.Y,
             ClipsDescendants = false,
@@ -584,7 +584,7 @@ function library:Window(WindowArgs)
             local Section = Utilities:Create("Frame", {
                 Name = "Section",
                 Parent = SectionArgs.Side == "Left" and Left or Right,
-                BackgroundColor3 = Color3.fromRGB(167, 54, 54),
+                BackgroundColor3 = Colors.Secondary,
                 BackgroundTransparency = 1,
                 Size = UDim2.new(0, 386, 0, 36)
             }, {
@@ -859,7 +859,7 @@ function library:Window(WindowArgs)
                             Font = Enum.Font.SourceSansBold,
                             RichText = true,
                             Size = UDim2.new(1, 0, 0, 14),
-                            TextColor3 = Color3.fromRGB(255, 255, 255),
+                            TextColor3 = Colors.PrimaryText,
                             BackgroundTransparency = 1
                         }),
                         Utilities:Create("TextButton", {
