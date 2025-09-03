@@ -32,7 +32,7 @@ function Utilities:Create(Inst, Properties, Childs)
     local BlacklistedProps = {
         BorderSizePixel = 0,
         Text = "",
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black background
     }
 
     for blprop, v in pairs(BlacklistedProps) do
@@ -80,30 +80,30 @@ function Utilities:GetMouse()
     return Vector2.new(UserInputService:GetMouseLocation().X + 1, UserInputService:GetMouseLocation().Y - 35)
 end
 
-if not isfolder("PPHUD") then
-    makefolder("PPHUD")
+if not isfolder("KERNITH") then
+    makefolder("KERNITH")
 
     local Arrow = request({Url = "https://raw.githubusercontent.com/Rain-Design/PPHUD/main/Dropdown.png", Method = "GET"})
-    writefile("PPHUD/Arrow.png", Arrow.Body)
+    writefile("KERNITH/Arrow.png", Arrow.Body)
 
     local Resize = request({Url = "https://raw.githubusercontent.com/Rain-Design/PPHUD/main/resize.png", Method = "GET"})
-    writefile("PPHUD/Resize.png", Resize.Body)
+    writefile("KERNITH/Resize.png", Resize.Body)
 end
 
 --// Colors --//
 local Colors = {
-    Primary = Color3.fromRGB(255, 255, 255), -- White
-    Secondary = Color3.fromRGB(0, 0, 0), -- Black
-    Tertiary = Color3.fromRGB(64, 64, 64), -- Dark Gray
-    Divider = Color3.fromRGB(100, 100, 100), -- Lighter gray for dividers
-    AccentDivider = Color3.fromRGB(120, 120, 120), -- Slightly lighter for accents
-    PrimaryText = Color3.fromRGB(0, 0, 0), -- Black text for contrast on white
-    SecondaryText = Color3.fromRGB(80, 80, 80), -- Darker gray for secondary text
-    TertiaryText = Color3.fromRGB(100, 100, 100), -- Medium gray for tertiary text
-    Hovering = Color3.fromRGB(200, 200, 200), -- Light gray for hover effects
-    Accent = Color3.fromRGB(0, 120, 255), -- Blue accent for contrast
-    DarkerAccent = Color3.fromRGB(0, 100, 200), -- Darker blue for accent variations
-    AccentText = Color3.fromRGB(255, 255, 255) -- White text for accent elements
+    Primary = Color3.fromRGB(0, 0, 0), -- Black background
+    Secondary = Color3.fromRGB(50, 50, 50), -- Dark gray for secondary elements
+    Tertiary = Color3.fromRGB(100, 100, 100), -- Medium gray for tertiary elements
+    Divider = Color3.fromRGB(255, 255, 255), -- White for dividers/strokes
+    AccentDivider = Color3.fromRGB(200, 200, 200), -- Light gray for accent dividers
+    PrimaryText = Color3.fromRGB(255, 255, 255), -- White text
+    SecondaryText = Color3.fromRGB(200, 200, 200), -- Light gray for secondary text
+    TertiaryText = Color3.fromRGB(150, 150, 150), -- Medium gray for tertiary text
+    Hovering = Color3.fromRGB(180, 180, 180), -- Light gray for hover/active buttons
+    Accent = Color3.fromRGB(255, 255, 255), -- White for sliders and active elements
+    DarkerAccent = Color3.fromRGB(200, 200, 200), -- Light gray for accent variations
+    AccentText = Color3.fromRGB(0, 0, 0) -- Black text for accent elements
 }
 --//
 
@@ -119,13 +119,13 @@ function library:Window(WindowArgs)
     local SelectedTab = nil
 
     local Window = Utilities:Create("ScreenGui", {
-        Name = "PPHUD",
+        Name = "KERNITH",
         ZIndexBehavior = Enum.ZIndexBehavior.Global
     }, {
         Utilities:Create("Frame", {
             Name = "Main",
             Size = UDim2.new(0, 800, 0, 500),
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+            BackgroundColor3 = Colors.Primary,
             ClipsDescendants = true,
             Position = UDim2.new(0, 600, 0, 270)
         }, {
@@ -163,7 +163,7 @@ function library:Window(WindowArgs)
                     Name = "ResizeIcon",
                     Size = UDim2.new(0, 10, 0, 10),
                     BackgroundTransparency = 1,
-                    Image = getcustomasset("PPHUD/Resize.png"),
+                    Image = getcustomasset("KERNITH/Resize.png"),
                     AnchorPoint = Vector2.new(1, 1),
                     Position = UDim2.new(1, 0, 1, 0),
                     ZIndex = DropIndex + 5
@@ -292,7 +292,7 @@ function library:Window(WindowArgs)
     local bottomText = Window.Main.Bottom.BottomText
 
     bottomText.MouseEnter:Connect(function()
-        Utilities:Tween(bottomText, .125, {TextColor3 = Colors.Accent})
+        Utilities:Tween(bottomText, .125, {TextColor3 = Colors.Hovering})
     end)
 
     bottomText.MouseLeave:Connect(function()
@@ -373,7 +373,7 @@ function library:Window(WindowArgs)
     local function Resize()
         local MouseLocation = Utilities:GetMouse()
         local X = math.clamp(MouseLocation.X - Window.Main.AbsolutePosition.X, 400, 1600)
-        local Y = math.clamp(MouseLocation.Y - Window.Main.AbsolutePosition.X, 200, 900)
+        local Y = math.clamp(MouseLocation.Y - Window.Main.AbsolutePosition.Y, 200, 900)
 
         SizeX.Value = X
         SizeY.Value = Y
@@ -385,7 +385,7 @@ function library:Window(WindowArgs)
     ResizeButton.MouseButton1Down:Connect(function()
         local ResizeMove, ResizeKill
 
-        Utilities:Tween(Window.Main.Bottom.ResizeIcon, .125, {ImageColor3 = Colors.Accent})
+        Utilities:Tween(Window.Main.Bottom.ResizeIcon, .125, {ImageColor3 = Colors.Hovering})
 
         ResizeMove = Mouse.Move:Connect(function()
             Resize()
@@ -497,7 +497,7 @@ function library:Window(WindowArgs)
             Name = "Left",
             BackgroundTransparency = 1,
             Visible = false,
-            BackgroundColor3 = Colors.Secondary,
+            BackgroundColor3 = Colors.Primary,
             CanvasSize = UDim2.new(0, 0, 0, 0),
             AutomaticCanvasSize = Enum.AutomaticSize.Y,
             ClipsDescendants = false,
@@ -515,7 +515,7 @@ function library:Window(WindowArgs)
             Name = "Right",
             BackgroundTransparency = 1,
             Visible = false,
-            BackgroundColor3 = Colors.Secondary,
+            BackgroundColor3 = Colors.Primary,
             CanvasSize = UDim2.new(0, 0, 0, 0),
             AutomaticCanvasSize = Enum.AutomaticSize.Y,
             ClipsDescendants = false,
@@ -584,7 +584,7 @@ function library:Window(WindowArgs)
             local Section = Utilities:Create("Frame", {
                 Name = "Section",
                 Parent = SectionArgs.Side == "Left" and Left or Right,
-                BackgroundColor3 = Colors.Secondary,
+                BackgroundColor3 = Colors.Primary,
                 BackgroundTransparency = 1,
                 Size = UDim2.new(0, 386, 0, 36)
             }, {
@@ -692,7 +692,7 @@ function library:Window(WindowArgs)
 
                 CheckButton.MouseEnter:Connect(function()
                     if not State then
-                        Utilities:Tween(Check.CheckFrame.UIStroke, .125, {Color = Colors.Tertiary})
+                        Utilities:Tween(Check.CheckFrame.UIStroke, .125, {Color = Colors.Hovering})
                         Utilities:Tween(Check.CheckFrame.CheckInner, .125, {BackgroundColor3 = Colors.Hovering})
                     end
                 end)
@@ -771,7 +771,7 @@ function library:Window(WindowArgs)
                 Button.ButtonFrame.MouseEnter:Connect(function()
                     Hovering = true
                     Utilities:Tween(Button.ButtonFrame, .125, {BackgroundColor3 = Colors.Hovering})
-                    Utilities:Tween(Button.ButtonFrame.UIStroke, .125, {Color = Colors.AccentDivider})
+                    Utilities:Tween(Button.ButtonFrame.UIStroke, .125, {Color = Colors.Hovering})
                 end)
 
                 Button.ButtonFrame.MouseLeave:Connect(function()
@@ -791,7 +791,7 @@ function library:Window(WindowArgs)
                 Button.ButtonFrame.ButtonButton.MouseButton1Up:Connect(function()
                     Utilities:Tween(Button.ButtonFrame.ButtonText, .1, {TextColor3 = Colors.PrimaryText})
                     if Hovering then
-                        Utilities:Tween(Button.ButtonFrame.UIStroke, .125, {Color = Colors.AccentDivider})
+                        Utilities:Tween(Button.ButtonFrame.UIStroke, .125, {Color = Colors.Hovering})
                     else
                         Utilities:Tween(Button.ButtonFrame.UIStroke, .125, {Color = Colors.Divider})
                     end
@@ -845,11 +845,11 @@ function library:Window(WindowArgs)
                         Size = UDim2.new(.6, 3, 0, 14)
                     }, {
                         Utilities:Create("UIStroke", {
-                            Color = Colors.AccentDivider
+                            Color = Colors.Divider
                         }),
                         Utilities:Create("Frame", {
                             Name = "SliderInner",
-                            BackgroundColor3 = Colors.DarkerAccent,
+                            BackgroundColor3 = Colors.Accent,
                             Size = UDim2.fromScale(DefaultScale, 1)
                         }),
                         Utilities:Create("TextLabel", {
@@ -888,22 +888,22 @@ function library:Window(WindowArgs)
                 end)
 
                 Slider.SliderOuter.MouseEnter:Connect(function()
-                    Utilities:Tween(Slider.SliderOuter.UIStroke, .125, {Color = Colors.Tertiary})
+                    Utilities:Tween(Slider.SliderOuter.UIStroke, .125, {Color = Colors.Hovering})
                     Utilities:Tween(Slider.SliderOuter, .125, {BackgroundColor3 = Colors.Hovering})
                 end)
 
                 Slider.SliderOuter.MouseLeave:Connect(function()
-                    Utilities:Tween(Slider.SliderOuter.UIStroke, .125, {Color = Colors.AccentDivider})
+                    Utilities:Tween(Slider.SliderOuter.UIStroke, .125, {Color = Colors.Divider})
                     Utilities:Tween(Slider.SliderOuter, .125, {BackgroundColor3 = Colors.Secondary})
-                    Utilities:Tween(Slider.SliderOuter.SliderInner, .125, {BackgroundColor3 = Colors.DarkerAccent})
-                end)
-
-                Slider.SliderOuter.SliderButton.MouseButton1Down:Connect(function()
                     Utilities:Tween(Slider.SliderOuter.SliderInner, .125, {BackgroundColor3 = Colors.Accent})
                 end)
 
+                Slider.SliderOuter.SliderButton.MouseButton1Down:Connect(function()
+                    Utilities:Tween(Slider.SliderOuter.SliderInner, .125, {BackgroundColor3 = Colors.Hovering})
+                end)
+
                 Slider.SliderOuter.SliderButton.MouseButton1Up:Connect(function()
-                    Utilities:Tween(Slider.SliderOuter.SliderInner, .125, {BackgroundColor3 = Colors.DarkerAccent})
+                    Utilities:Tween(Slider.SliderOuter.SliderInner, .125, {BackgroundColor3 = Colors.Accent})
                 end)
 
                 local MinSize = 0
@@ -1000,7 +1000,7 @@ function library:Window(WindowArgs)
                         ZIndex = DropdownTable.Index
                     }, {
                         Utilities:Create("UIStroke", {
-                            Color = Colors.AccentDivider
+                            Color = Colors.Divider
                         }),
                         Utilities:Create("TextLabel", {
                             Name = "DropdownText",
@@ -1057,14 +1057,14 @@ function library:Window(WindowArgs)
                             ZIndex = DropdownTable.Index
                         }, {
                             Utilities:Create("UIStroke", {
-                                Color = Colors.AccentDivider
+                                Color = Colors.Divider
                             }),
                             Utilities:Create("ImageLabel", {
                                 Name = "DropdownImage",
                                 Size = UDim2.new(0, 10, 0, 10),
                                 BackgroundTransparency = 1,
                                 Rotation = 0,
-                                Image = getcustomasset("PPHUD/Arrow.png"),
+                                Image = getcustomasset("KERNITH/Arrow.png"),
                                 AnchorPoint = Vector2.new(.5, .5),
                                 Position = UDim2.new(.5, 0, .5, 0),
                                 ZIndex = DropdownTable.Index
@@ -1212,7 +1212,7 @@ function library:Window(WindowArgs)
                     DropdownElement.MouseEnter:Connect(function()
                         if not table.find(MultiTable, DropdownElement.DropdownElementText.Text) then
                             Utilities:Tween(DropdownElement, .125, {BackgroundTransparency = .95})
-                            Utilities:Tween(DropdownElement.DropdownElementText, .125, {TextColor3 = Colors.Accent})
+                            Utilities:Tween(DropdownElement.DropdownElementText, .125, {TextColor3 = Colors.Hovering})
                         end
                     end)
 
