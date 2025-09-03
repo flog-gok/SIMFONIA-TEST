@@ -719,8 +719,8 @@ function library:Window(WindowArgs)
                     else
                         Utilities:Tween(Check.CheckFrame.UIStroke, .125, {Color = Colors.Divider})
                         Utilities:Tween(Check.CheckFrame.CheckInner, .125, {BackgroundColor3 = Colors.Secondary})
-                    end
-                end)
+                    end)
+                end
 
                 CheckButton.MouseButton1Click:Connect(function()
                     State = not State
