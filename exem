@@ -719,8 +719,8 @@ function library:Window(WindowArgs)
                     else
                         Utilities:Tween(Check.CheckFrame.UIStroke, .125, {Color = Colors.Divider})
                         Utilities:Tween(Check.CheckFrame.CheckInner, .125, {BackgroundColor3 = Colors.Secondary})
-                    end)
-                end
+                    end
+                end)
 
                 CheckButton.MouseButton1Click:Connect(function()
                     State = not State
@@ -1027,7 +1027,7 @@ function library:Window(WindowArgs)
                             BackgroundColor3 = Colors.Secondary,
                             ClipsDescendants = true,
                             Position = UDim2.new(0, 0, 0, 14),
-                            ZIndex = DropoutTable.Index
+                            ZIndex = DropdownTable.Index
                         }, {
                             Utilities:Create("UIListLayout")
                         }),
@@ -1036,7 +1036,7 @@ function library:Window(WindowArgs)
                             Size = UDim2.new(0, 20, 0, 14),
                             BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                             Position = UDim2.new(1, -41, 0, 0),
-                            ZIndex = DropoutTable.Index
+                            ZIndex = DropdownTable.Index
                         }, {
                             Utilities:Create("UIGradient", {
                                 Color = ColorSequence.new({
@@ -1054,7 +1054,7 @@ function library:Window(WindowArgs)
                             Size = UDim2.new(0, 21, 0, 14),
                             BackgroundColor3 = Colors.Tertiary,
                             Position = UDim2.new(1, -21, 0, 0),
-                            ZIndex = DropoutTable.Index
+                            ZIndex = DropdownTable.Index
                         }, {
                             Utilities:Create("UIStroke", {
                                 Color = Colors.Divider
@@ -1067,7 +1067,7 @@ function library:Window(WindowArgs)
                                 Image = getcustomasset("KERNITH/Arrow.png"),
                                 AnchorPoint = Vector2.new(.5, .5),
                                 Position = UDim2.new(.5, 0, .5, 0),
-                                ZIndex = DropoutTable.Index
+                                ZIndex = DropdownTable.Index
                             })
                         })
                     })
@@ -1078,33 +1078,33 @@ function library:Window(WindowArgs)
                     Dropdown.Size = UDim2.new(0, Size, 0, 21)
                 end)
 
-                Dropout.DropdownFrame.MouseEnter:Connect(function()
+                Dropdown.DropdownFrame.MouseEnter:Connect(function()
                     if not State then
-                        Utilities:Tween(Dropout.DropdownFrame, .125, {BackgroundColor3 = Colors.Hovering})
+                        Utilities:Tween(Dropdown.DropdownFrame, .125, {BackgroundColor3 = Colors.Hovering})
                     end
                 end)
 
-                Dropout.DropdownFrame.MouseLeave:Connect(function()
+                Dropdown.DropdownFrame.MouseLeave:Connect(function()
                     if not State then
-                        Utilities:Tween(Dropout.DropdownFrame, .125, {BackgroundColor3 = Colors.Secondary})
+                        Utilities:Tween(Dropdown.DropdownFrame, .125, {BackgroundColor3 = Colors.Secondary})
                     end
                 end)
 
-                local DropoutContainer = Dropout.DropdownFrame.DropoutContainer
-                local DropoutImage = Dropout.DropdownFrame.DropoutImageContainer.DropoutImage
+                local DropdownContainer = Dropdown.DropdownFrame.DropdownContainer
+                local DropdownImage = Dropdown.DropdownFrame.DropdownImageContainer.DropdownImage
 
-                function DropoutTable:Toggle(bool)
+                function DropdownTable:Toggle(bool)
                     State = bool
 
                     if State then
-                        Utilities:Tween(Dropout.DropdownFrame, .2, {BackgroundColor3 = Colors.Secondary})
-                        DropoutContainer.Size = DropoutContainer.Size + UDim2.fromOffset(0, DropoutY)
-                        Dropout.DropdownFrame.Size = Dropout.DropdownFrame.Size + UDim2.fromOffset(0, DropoutY)
-                        DropoutImage.Rotation = 90
+                        Utilities:Tween(Dropdown.DropdownFrame, .2, {BackgroundColor3 = Colors.Secondary})
+                        DropdownContainer.Size = DropdownContainer.Size + UDim2.fromOffset(0, DropdownY)
+                        Dropdown.DropdownFrame.Size = Dropdown.DropdownFrame.Size + UDim2.fromOffset(0, DropdownY)
+                        DropdownImage.Rotation = 90
                     else
-                        DropoutContainer.Size = DropoutContainer.Size - UDim2.fromOffset(0, DropoutY)
-                        Dropout.DropdownFrame.Size = Dropout.DropdownFrame.Size - UDim2.fromOffset(0, DropoutY)
-                        DropoutImage.Rotation = 0
+                        DropdownContainer.Size = DropdownContainer.Size - UDim2.fromOffset(0, DropdownY)
+                        Dropdown.DropdownFrame.Size = Dropdown.DropdownFrame.Size - UDim2.fromOffset(0, DropdownY)
+                        DropdownImage.Rotation = 0
                     end
                 end
 
@@ -1114,14 +1114,14 @@ function library:Window(WindowArgs)
                         library[Info.Flag] = Info.Default
                     end
                     if Info.ChangeText then
-                        Dropout.DropdownFrame.DropoutText.Text = Info.Default
+                        Dropdown.DropdownFrame.DropdownText.Text = Info.Default
                     end
                 end
 
-                function DropoutTable:Select(v)
+                function DropdownTable:Select(v)
                     task.spawn(Info.Callback, v)
                     if Info.ChangeText then
-                        Dropout.DropdownFrame.DropoutText.Text = v
+                        Dropdown.DropdownFrame.DropdownText.Text = v
                     end
                 end
 
@@ -1129,66 +1129,66 @@ function library:Window(WindowArgs)
 
                 local function OnPick(v)
                     if Info.Multi then
-                        if not table.find(MultiTable, v.DropoutElementText.Text) then
+                        if not table.find(MultiTable, v.DropdownElementText.Text) then
                             Utilities:Tween(v, .125, {BackgroundTransparency = .95})
-                            Utilities:Tween(v.DropoutElementText, .125, {TextColor3 = Colors.Hovering})
-                            table.insert(MultiTable, v.DropoutElementText.Text)
+                            Utilities:Tween(v.DropdownElementText, .125, {TextColor3 = Colors.Hovering})
+                            table.insert(MultiTable, v.DropdownElementText.Text)
                         else
                             Utilities:Tween(v, .125, {BackgroundTransparency = 1})
-                            Utilities:Tween(v.DropoutElementText, .125, {TextColor3 = Colors.PrimaryText})
+                            Utilities:Tween(v.DropdownElementText, .125, {TextColor3 = Colors.PrimaryText})
                             for i, e in pairs(MultiTable) do
-                                if v.DropoutElementText.Text == e then
+                                if v.DropdownElementText.Text == e then
                                     table.remove(MultiTable, i)
                                 end
                             end
                         end
                         task.spawn(Info.Callback, MultiTable)
                         if Info.ChangeText then
-                            Dropout.DropdownFrame.DropoutText.Text = ""
+                            Dropdown.DropdownFrame.DropdownText.Text = ""
                             for i, z in pairs(MultiTable) do
-                                Dropout.DropdownFrame.DropoutText.Text ..= i ~= #MultiTable and z..", " or z
+                                Dropdown.DropdownFrame.DropdownText.Text ..= i ~= #MultiTable and z..", " or z
                             end
-                            if string.len(Dropout.DropdownFrame.DropoutText.Text) == 0 then
-                                Dropout.DropdownFrame.DropoutText.Text = Info.Text
+                            if string.len(Dropdown.DropdownFrame.DropdownText.Text) == 0 then
+                                Dropdown.DropdownFrame.DropdownText.Text = Info.Text
                             end
                         end
                     else
-                        DropoutTable:Select(v.DropoutElementText.Text)
-                        DropoutTable:Toggle(false)
+                        DropdownTable:Select(v.DropdownElementText.Text)
+                        DropdownTable:Toggle(false)
                     end
                 end
 
-                function DropoutTable:Refresh(table)
-                    for _, v in pairs(DropoutContainer:GetChildren()) do
+                function DropdownTable:Refresh(table)
+                    for _, v in pairs(DropdownContainer:GetChildren()) do
                         if v.ClassName == "Frame" then
                             v:Destroy()
-                            DropoutY = DropoutY - 14
+                            DropdownY = DropdownY - 14
                             if State then
-                                DropoutContainer.Size = DropoutContainer.Size - UDim2.fromOffset(0, 14)
-                                Dropout.DropdownFrame.Size = Dropout.DropdownFrame.Size - UDim2.fromOffset(0, 14)
+                                DropdownContainer.Size = DropdownContainer.Size - UDim2.fromOffset(0, 14)
+                                Dropdown.DropdownFrame.Size = Dropdown.DropdownFrame.Size - UDim2.fromOffset(0, 14)
                             end
                         end
                     end
 
                     for _, v in pairs(table) do
                         warn("Set", v)
-                        DropoutTable:Add(v)
+                        DropdownTable:Add(v)
                     end
                 end
 
-                function DropoutTable:Add(str)
-                    DropoutY = DropoutY + 14
+                function DropdownTable:Add(str)
+                    DropdownY = DropdownY + 14
                     if State then
-                        DropoutContainer.Size = DropoutContainer.Size + UDim2.fromOffset(0, 14)
-                        Dropout.DropdownFrame.Size = Dropout.DropdownFrame.Size + UDim2.fromOffset(0, 14)
+                        DropdownContainer.Size = DropdownContainer.Size + UDim2.fromOffset(0, 14)
+                        Dropdown.DropdownFrame.Size = Dropdown.DropdownFrame.Size + UDim2.fromOffset(0, 14)
                     end
 
-                    local DropoutElement = Utilities:Create("Frame", {
+                    local DropdownElement = Utilities:Create("Frame", {
                         Name = "DropdownElement",
                         Size = UDim2.new(1, 0, 0, 14),
-                        Parent = DropoutContainer,
+                        Parent = DropdownContainer,
                         BackgroundTransparency = 1,
-                        ZIndex = DropoutTable.Index
+                        ZIndex = DropdownTable.Index
                     }, {
                         Utilities:Create("TextLabel", {
                             Name = "DropdownElementText",
@@ -1199,46 +1199,46 @@ function library:Window(WindowArgs)
                             RichText = true,
                             TextColor3 = Colors.PrimaryText,
                             Font = Enum.Font.SourceSansBold,
-                            ZIndex = DropoutTable.Index
+                            ZIndex = DropdownTable.Index
                         }),
                         Utilities:Create("TextButton", {
                             Name = "DropdownElementButton",
                             Size = UDim2.new(1, 0, 1, 0),
                             BackgroundTransparency = 1,
-                            ZIndex = DropoutTable.Index
+                            ZIndex = DropdownTable.Index
                         })
                     })
 
-                    DropoutElement.MouseEnter:Connect(function()
-                        if not table.find(MultiTable, DropoutElement.DropoutElementText.Text) then
-                            Utilities:Tween(DropoutElement, .125, {BackgroundTransparency = .95})
-                            Utilities:Tween(DropoutElement.DropoutElementText, .125, {TextColor3 = Colors.Hovering})
+                    DropdownElement.MouseEnter:Connect(function()
+                        if not table.find(MultiTable, DropdownElement.DropdownElementText.Text) then
+                            Utilities:Tween(DropdownElement, .125, {BackgroundTransparency = .95})
+                            Utilities:Tween(DropdownElement.DropdownElementText, .125, {TextColor3 = Colors.Hovering})
                         end
                     end)
 
-                    DropoutElement.MouseLeave:Connect(function()
-                        if not table.find(MultiTable, DropoutElement.DropoutElementText.Text) then
-                            Utilities:Tween(DropoutElement, .125, {BackgroundTransparency = 1})
-                            Utilities:Tween(DropoutElement.DropoutElementText, .125, {TextColor3 = Colors.PrimaryText})
+                    DropdownElement.MouseLeave:Connect(function()
+                        if not table.find(MultiTable, DropdownElement.DropdownElementText.Text) then
+                            Utilities:Tween(DropdownElement, .125, {BackgroundTransparency = 1})
+                            Utilities:Tween(DropdownElement.DropdownElementText, .125, {TextColor3 = Colors.PrimaryText})
                         end
                     end)
 
-                    DropoutElement.DropoutElementButton.MouseButton1Click:Connect(function()
-                        OnPick(DropoutElement)
+                    DropdownElement.DropdownElementButton.MouseButton1Click:Connect(function()
+                        OnPick(DropdownElement)
                     end)
                 end
 
                 for _, v in pairs(Info.List) do
-                    DropoutTable:Add(v)
+                    DropdownTable:Add(v)
                 end
 
-                Dropout.DropdownFrame.DropoutButton.MouseButton1Click:Connect(function()
+                Dropdown.DropdownFrame.DropdownButton.MouseButton1Click:Connect(function()
                     State = not State
-                    DropoutTable:Toggle(State)
+                    DropdownTable:Toggle(State)
                 end)
 
                 DropIndex = DropIndex - 1
-                return DropoutTable
+                return DropdownTable
             end
 
             return SectionTable
