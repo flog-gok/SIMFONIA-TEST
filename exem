@@ -32,7 +32,7 @@ function Utilities:Create(Inst, Properties, Childs)
     local BlacklistedProps = {
         BorderSizePixel = 0,
         Text = "",
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     }
 
     for blprop, v in pairs(BlacklistedProps) do
@@ -92,17 +92,17 @@ end
 
 --// Colors --//
 local Colors = {
-    Primary = Color3.fromRGB(255, 255, 255), -- White
-    Secondary = Color3.fromRGB(0, 0, 0), -- Black
-    Tertiary = Color3.fromRGB(64, 64, 64), -- Dark Gray
-    Divider = Color3.fromRGB(100, 100, 100), -- Lighter gray for dividers
-    AccentDivider = Color3.fromRGB(120, 120, 120), -- Slightly lighter for accents
-    PrimaryText = Color3.fromRGB(0, 0, 0), -- Black text for contrast on white
-    SecondaryText = Color3.fromRGB(80, 80, 80), -- Darker gray for secondary text
-    TertiaryText = Color3.fromRGB(100, 100, 100), -- Medium gray for tertiary text
-    Hovering = Color3.fromRGB(200, 200, 200), -- Light gray for hover effects
-    Accent = Color3.fromRGB(0, 120, 255), -- Blue accent for contrast
-    DarkerAccent = Color3.fromRGB(0, 100, 200), -- Darker blue for accent variations
+    Primary = Color3.fromRGB(20, 20, 20), -- Background
+    Secondary = Color3.fromRGB(30, 30, 30), -- Dropdown background
+    Tertiary = Color3.fromRGB(50, 50, 50), -- Dark Gray for lines
+    Divider = Color3.fromRGB(50, 50, 50), -- Dark Gray for dividers
+    AccentDivider = Color3.fromRGB(70, 70, 70), -- Slightly lighter for accents
+    PrimaryText = Color3.fromRGB(255, 255, 255), -- White text for contrast
+    SecondaryText = Color3.fromRGB(180, 180, 180), -- Light gray for secondary text
+    TertiaryText = Color3.fromRGB(150, 150, 150), -- Medium gray for tertiary text
+    Hovering = Color3.fromRGB(60, 60, 60), -- Gray for hover effects
+    Accent = Color3.fromRGB(92, 114, 255), -- Blue for sliders/buttons
+    DarkerAccent = Color3.fromRGB(70, 90, 200), -- Darker blue for accent variations
     AccentText = Color3.fromRGB(255, 255, 255) -- White text for accent elements
 }
 --//
@@ -124,8 +124,8 @@ function library:Window(WindowArgs)
     }, {
         Utilities:Create("Frame", {
             Name = "Main",
-            Size = UDim2.new(0, 600, 0, 600),
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+            Size = UDim2.new(0, 650, 0, 600),
+            BackgroundColor3 = Color3.fromRGB(20, 20, 20),
             ClipsDescendants = true,
             Position = UDim2.new(0, 600, 0, 270)
         }, {
@@ -372,7 +372,7 @@ function library:Window(WindowArgs)
 
     local function Resize()
         local MouseLocation = Utilities:GetMouse()
-        local X = math.clamp(MouseLocation.X - Window.Main.AbsolutePosition.X, 300, 1200)
+        local X = math.clamp(MouseLocation.X - Window.Main.AbsolutePosition.X, 325, 1300)
         local Y = math.clamp(MouseLocation.Y - Window.Main.AbsolutePosition.Y, 300, 1000)
 
         SizeX.Value = X
@@ -522,7 +522,7 @@ function library:Window(WindowArgs)
             ScrollBarThickness = 0,
             Parent = ContainerHolder,
             Size = UDim2.new(.5, 0, 0, 546),
-            Position = UDim2.new(0, 300, 0, 0)
+            Position = UDim2.new(0, 325, 0, 0)
         }, {
             Utilities:Create("UIListLayout"),
             Utilities:Create("UIPadding", {
@@ -586,11 +586,11 @@ function library:Window(WindowArgs)
                 Parent = SectionArgs.Side == "Left" and Left or Right,
                 BackgroundColor3 = Colors.Secondary,
                 BackgroundTransparency = 1,
-                Size = UDim2.new(0, 286, 0, 36)
+                Size = UDim2.new(0, 311, 0, 36)
             }, {
                 Utilities:Create("TextLabel", {
                     Name = "SectionText",
-                    Size = UDim2.new(0, 286, 0, 26),
+                    Size = UDim2.new(0, 311, 0, 26),
                     Text = SectionArgs.Text,
                     TextXAlignment = Enum.TextXAlignment.Left,
                     TextSize = 14,
@@ -603,12 +603,12 @@ function library:Window(WindowArgs)
                 Utilities:Create("Frame", {
                     Name = "Divider",
                     Position = UDim2.new(0, 0, 0, 28),
-                    Size = UDim2.new(0, 286, 0, 1),
+                    Size = UDim2.new(0, 311, 0, 1),
                     BackgroundColor3 = Colors.Divider
                 }),
                 Utilities:Create("Frame", {
                     Name = "Container",
-                    Size = UDim2.new(0, 286, 0, 0),
+                    Size = UDim2.new(0, 311, 0, 0),
                     BackgroundTransparency = 1,
                     Position = UDim2.new(0, 0, 0, 38)
                 }, {
@@ -630,8 +630,8 @@ function library:Window(WindowArgs)
 
             SectionContainer.ChildAdded:Connect(function()
                 SectionY = SectionY + 21
-                Section.Size = UDim2.new(0, 286, 0, SectionY)
-                SectionContainer.Size = UDim2.new(0, 286, 0, SectionY)
+                Section.Size = UDim2.new(0, 311, 0, SectionY)
+                SectionContainer.Size = UDim2.new(0, 311, 0, SectionY)
             end)
 
             function SectionTable:Check(CheckArgs)
@@ -647,7 +647,7 @@ function library:Window(WindowArgs)
                 local Check = Utilities:Create("Frame", {
                     Name = "Check",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 286, 0, 21),
+                    Size = UDim2.new(0, 311, 0, 21),
                     BackgroundTransparency = 1,
                 }, {
                     Utilities:Create("TextButton", {
@@ -737,7 +737,7 @@ function library:Window(WindowArgs)
                 local Button = Utilities:Create("Frame", {
                     Name = "Button",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 286, 0, 21),
+                    Size = UDim2.new(0, 311, 0, 21),
                     BackgroundTransparency = 1
                 }, {
                     Utilities:Create("Frame", {
@@ -836,7 +836,7 @@ function library:Window(WindowArgs)
                 local Slider = Utilities:Create("Frame", {
                     Name = "Slider",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 286, 0, 21),
+                    Size = UDim2.new(0, 311, 0, 21),
                     BackgroundTransparency = 1
                 }, {
                     Utilities:Create("Frame", {
@@ -945,7 +945,7 @@ function library:Window(WindowArgs)
                 local Label = Utilities:Create("Frame", {
                     Name = "Label",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 286, 0, 21),
+                    Size = UDim2.new(0, 311, 0, 21),
                     BackgroundTransparency = 1
                 }, {
                     Utilities:Create("TextLabel", {
@@ -954,7 +954,7 @@ function library:Window(WindowArgs)
                         TextColor3 = Info.Color,
                         RichText = true,
                         BackgroundTransparency = 1,
-                        Size = UDim2.new(0, 286, 0, 14),
+                        Size = UDim2.new(0, 311, 0, 14),
                         TextXAlignment = Enum.TextXAlignment.Left,
                         TextSize = 13,
                         Font = Enum.Font.SourceSansBold
@@ -990,7 +990,7 @@ function library:Window(WindowArgs)
                     Name = "Dropdown",
                     BackgroundTransparency = 1,
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 286, 0, 21)
+                    Size = UDim2.new(0, 311, 0, 21)
                 }, {
                     Utilities:Create("Frame", {
                         Name = "DropdownFrame",
@@ -1011,7 +1011,7 @@ function library:Window(WindowArgs)
                             RichText = true,
                             Position = UDim2.new(0, 4, 0, 0),
                             TextSize = 13,
-                            TextColor3 = Colors.TertiaryText,
+                            TextColor3 = Colors.PrimaryText,
                             Font = Enum.Font.SourceSansBold,
                             ZIndex = DropdownTable.Index
                         }),
@@ -1034,7 +1034,7 @@ function library:Window(WindowArgs)
                         Utilities:Create("Frame", {
                             Name = "GradientHolder",
                             Size = UDim2.new(0, 20, 0, 14),
-                            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+                            BackgroundColor3 = Color3.fromRGB(20, 20, 20),
                             Position = UDim2.new(1, -41, 0, 0),
                             ZIndex = DropdownTable.Index
                         }, {
@@ -1180,7 +1180,7 @@ function library:Window(WindowArgs)
                     DropdownY = DropdownY + 14
                     if State then
                         DropdownContainer.Size = DropdownContainer.Size + UDim2.fromOffset(0, 14)
-                        Dropdown.DropdownFrame.Size = Dropdown.DropdownFrame.Size - UDim2.fromOffset(0, 14)
+                        Dropdown.DropdownFrame.Size = Dropdown.DropdownFrame.Size + UDim2.fromOffset(0, 14)
                     end
 
                     local DropdownElement = Utilities:Create("Frame", {
