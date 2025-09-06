@@ -92,19 +92,19 @@ end
 
 --// Colors - Modified to Gray/Red Theme --//
 local Colors = {
-    Primary = Color3.fromRGB(60, 60, 60), -- Main gray background
+    Primary = Color3.fromRGB(80, 80, 80), -- Main gray background
     Secondary = Color3.fromRGB(80, 80, 80), -- Lighter gray for panels
-    Tertiary = Color3.fromRGB(40, 40, 40), -- Darker gray
+    Tertiary = Color3.fromRGB(80, 80, 80), -- Darker gray
     Divider = Color3.fromRGB(0, 0, 0), -- Black dividers
     AccentDivider = Color3.fromRGB(0, 0, 0), -- Black accent dividers
-    PrimaryText = Color3.fromRGB(0, 0, 0), -- Black text
+    PrimaryText = Color3.fromRGB(230, 230, 230), -- NEW
     SecondaryText = Color3.fromRGB(20, 20, 20), -- Dark gray text
     TertiaryText = Color3.fromRGB(40, 40, 40), -- Medium gray text
     Hovering = Color3.fromRGB(100, 100, 100), -- Light gray for hover effects
     Accent = Color3.fromRGB(200, 50, 50), -- Red for active buttons/sliders
     DarkerAccent = Color3.fromRGB(150, 30, 30), -- Darker red
-    AccentText = Color3.fromRGB(0, 0, 0), -- Black text on red elements
-    InactiveButton = Color3.fromRGB(0, 0, 0) -- Black for inactive buttons
+    AccentText = Color3.fromRGB(230, 230, 230), -- Black text on red elements
+    InactiveButton = Color3.fromRGB(50, 50, 50) -- Black for inactive buttons
 }
 --//
 
@@ -479,6 +479,14 @@ function library:Window(WindowArgs)
                 Position = UDim2.new(.5, 0, 1, 0),
                 Size = UDim2.new(1, 0, 0, 1),
                 ZIndex = 3,
+                BackgroundColor3 = Colors.Divider
+            }),
+            Utilities:Create("Frame", { -- Added vertical separator on the right side
+                Name = "VerticalSeparator",
+                AnchorPoint = Vector2.new(1, 0.5),
+                Position = UDim2.new(1, 0, 0.5, 0),
+                Size = UDim2.new(0, 1, 0, 48),
+                ZIndex = 4,
                 BackgroundColor3 = Colors.Divider
             }),
             Utilities:Create("TextLabel", {
