@@ -103,8 +103,8 @@ local Colors = {
     Hovering = Color3.fromRGB(100, 100, 100), -- Light gray for hover effects
     Accent = Color3.fromRGB(200, 50, 50), -- Red for active buttons/sliders
     DarkerAccent = Color3.fromRGB(150, 30, 30), -- Darker red
-    AccentText = Color3.fromRGB(0, 0, 0), -- Black text on red elements
-    InactiveButton = Color3.fromRGB(0, 0, 0) -- Black for inactive buttons
+    AccentText = Color3.fromRGB(255, 255, 255), -- Black text on red elements
+    InactiveButton = Color3.fromRGB(50, 50, 50) -- Black for inactive buttons
 }
 --//
 
