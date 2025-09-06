@@ -32,7 +32,7 @@ function Utilities:Create(Inst, Properties, Childs)
     local BlacklistedProps = {
         BorderSizePixel = 0,
         Text = "",
-        BackgroundColor3 = Color3.fromRGB(60, 60, 60) -- Changed to gray
+        BackgroundColor3 = Color3.fromRGB(80, 80, 80) -- Changed to gray
     }
 
     for blprop, v in pairs(BlacklistedProps) do
