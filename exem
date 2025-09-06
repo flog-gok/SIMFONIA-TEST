@@ -32,7 +32,7 @@ function Utilities:Create(Inst, Properties, Childs)
     local BlacklistedProps = {
         BorderSizePixel = 0,
         Text = "",
-        BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+        BackgroundColor3 = Color3.fromRGB(60, 60, 60) -- Changed to gray
     }
 
     for blprop, v in pairs(BlacklistedProps) do
@@ -90,20 +90,21 @@ if not isfolder("KERNITH") then
     writefile("KERNITH/Resize.png", Resize.Body)
 end
 
---// Colors --//
+--// Colors - Modified to Gray/Red Theme --//
 local Colors = {
-    Primary = Color3.fromRGB(20, 20, 20), -- Background
-    Secondary = Color3.fromRGB(30, 30, 30), -- Dropdown background
-    Tertiary = Color3.fromRGB(50, 50, 50), -- Dark Gray for lines
-    Divider = Color3.fromRGB(50, 50, 50), -- Dark Gray for dividers
-    AccentDivider = Color3.fromRGB(70, 70, 70), -- Slightly lighter for accents
-    PrimaryText = Color3.fromRGB(255, 255, 255), -- White text for contrast
-    SecondaryText = Color3.fromRGB(180, 180, 180), -- Light gray for secondary text
-    TertiaryText = Color3.fromRGB(150, 150, 150), -- Medium gray for tertiary text
-    Hovering = Color3.fromRGB(60, 60, 60), -- Gray for hover effects
-    Accent = Color3.fromRGB(92, 114, 255), -- Blue for sliders/buttons
-    DarkerAccent = Color3.fromRGB(70, 90, 200), -- Darker blue for accent variations
-    AccentText = Color3.fromRGB(255, 255, 255) -- White text for accent elements
+    Primary = Color3.fromRGB(60, 60, 60), -- Main gray background
+    Secondary = Color3.fromRGB(80, 80, 80), -- Lighter gray for panels
+    Tertiary = Color3.fromRGB(40, 40, 40), -- Darker gray
+    Divider = Color3.fromRGB(0, 0, 0), -- Black dividers
+    AccentDivider = Color3.fromRGB(0, 0, 0), -- Black accent dividers
+    PrimaryText = Color3.fromRGB(0, 0, 0), -- Black text
+    SecondaryText = Color3.fromRGB(20, 20, 20), -- Dark gray text
+    TertiaryText = Color3.fromRGB(40, 40, 40), -- Medium gray text
+    Hovering = Color3.fromRGB(100, 100, 100), -- Light gray for hover effects
+    Accent = Color3.fromRGB(200, 50, 50), -- Red for active buttons/sliders
+    DarkerAccent = Color3.fromRGB(150, 30, 30), -- Darker red
+    AccentText = Color3.fromRGB(0, 0, 0), -- Black text on red elements
+    InactiveButton = Color3.fromRGB(0, 0, 0) -- Black for inactive buttons
 }
 --//
 
@@ -124,11 +125,15 @@ function library:Window(WindowArgs)
     }, {
         Utilities:Create("Frame", {
             Name = "Main",
-            Size = UDim2.new(0, 750, 0, 600), -- Changed line: increased width from 650 to 750
-            BackgroundColor3 = Color3.fromRGB(20, 20, 20),
+            Size = UDim2.new(0, 750, 0, 600),
+            BackgroundColor3 = Colors.Primary,
             ClipsDescendants = true,
             Position = UDim2.new(0, 600, 0, 270)
         }, {
+            Utilities:Create("UIStroke", { -- Added black stroke to main window
+                Color = Colors.Divider,
+                Thickness = 2
+            }),
             Utilities:Create("UIGradient", {
                 Color = ColorSequence.new({
                     ColorSequenceKeypoint.new(0, Colors.Primary),
@@ -151,6 +156,10 @@ function library:Window(WindowArgs)
                 BackgroundColor3 = Colors.Secondary,
                 ZIndex = DropIndex + 5
             }, {
+                Utilities:Create("UIStroke", { -- Added black stroke to bottom
+                    Color = Colors.Divider,
+                    Thickness = 1
+                }),
                 Utilities:Create("Frame", {
                     Name = "Divider",
                     Size = UDim2.new(1, 0, 0, 1),
@@ -164,6 +173,7 @@ function library:Window(WindowArgs)
                     Size = UDim2.new(0, 10, 0, 10),
                     BackgroundTransparency = 1,
                     Image = getcustomasset("KERNITH/Resize.png"),
+                    ImageColor3 = Colors.PrimaryText, -- Black resize icon
                     AnchorPoint = Vector2.new(1, 1),
                     Position = UDim2.new(1, 0, 1, 0),
                     ZIndex = DropIndex + 5
@@ -204,6 +214,10 @@ function library:Window(WindowArgs)
                 BackgroundColor3 = Colors.Secondary,
                 Size = UDim2.new(1, 0, 0, 48)
             }, {
+                Utilities:Create("UIStroke", { -- Added black stroke to topbar
+                    Color = Colors.Divider,
+                    Thickness = 1
+                }),
                 Utilities:Create("Frame", {
                     Name = "Divider",
                     Size = UDim2.new(1, 0, 0, 1),
@@ -243,7 +257,8 @@ function library:Window(WindowArgs)
         BackgroundColor3 = Colors.Primary
     }, {
         Utilities:Create("UIStroke", {
-            Color = Colors.Divider
+            Color = Colors.Divider,
+            Thickness = 2 -- Thicker black border for console
         }),
         Utilities:Create("ScrollingFrame", {
             Name = "ConsoleContainer",
@@ -265,6 +280,10 @@ function library:Window(WindowArgs)
             ZIndex = 11001,
             Size = UDim2.new(1, 0, 0, 24)
         }, {
+            Utilities:Create("UIStroke", { -- Added black stroke to console topbar
+                Color = Colors.Divider,
+                Thickness = 1
+            }),
             Utilities:Create("TextLabel", {
                 Name = "ConsoleText",
                 Text = "Console",
@@ -321,7 +340,7 @@ function library:Window(WindowArgs)
         local Message = Utilities:Create("Frame", {
             Name = "ConsoleMessage",
             BackgroundColor3 = Colors.Divider,
-            BackgroundTransparency = coloredMessage and 0 or 1,
+            BackgroundTransparency = coloredMessage and 0.8 or 1,
             Size = UDim2.new(0, 500, 0, 23),
             ZIndex = 11002,
             Parent = Console.ConsoleContainer
@@ -372,7 +391,7 @@ function library:Window(WindowArgs)
 
     local function Resize()
         local MouseLocation = Utilities:GetMouse()
-        local X = math.clamp(MouseLocation.X - Window.Main.AbsolutePosition.X, 375, 1500) -- Changed line: updated min width from 325 to 375, max width from 1300 to 1500
+        local X = math.clamp(MouseLocation.X - Window.Main.AbsolutePosition.X, 375, 1500)
         local Y = math.clamp(MouseLocation.Y - Window.Main.AbsolutePosition.Y, 300, 1000)
 
         SizeX.Value = X
@@ -395,7 +414,7 @@ function library:Window(WindowArgs)
             if UserInput.UserInputType == Enum.UserInputType.MouseButton1 then
                 ResizeMove:Disconnect()
                 ResizeKill:Disconnect()
-                Utilities:Tween(Window.Main.Bottom.ResizeIcon, .125, {ImageColor3 = Color3.fromRGB(255, 255, 255)})
+                Utilities:Tween(Window.Main.Bottom.ResizeIcon, .125, {ImageColor3 = Colors.PrimaryText})
             end
         end)
     end)
@@ -478,8 +497,8 @@ function library:Window(WindowArgs)
                 Size = UDim2.new(1, 0, 1, 0),
                 BackgroundTransparency = 1
             }, {
-                Utilities:Create("UIStroke", { -- Added lines: added black stroke to TabButton
-                    Color = Color3.fromRGB(0, 0, 0),
+                Utilities:Create("UIStroke", {
+                    Color = Colors.Divider,
                     Thickness = 1
                 })
             })
@@ -527,7 +546,7 @@ function library:Window(WindowArgs)
             ScrollBarThickness = 0,
             Parent = ContainerHolder,
             Size = UDim2.new(.5, 0, 0, 546),
-            Position = UDim2.new(0, 375, 0, 0) -- Changed line: updated position from 325 to 375
+            Position = UDim2.new(0, 375, 0, 0)
         }, {
             Utilities:Create("UIListLayout"),
             Utilities:Create("UIPadding", {
@@ -572,7 +591,7 @@ function library:Window(WindowArgs)
 
             Left.Visible = true
             Right.Visible = true
-            Utilities:Tween(Tab.Divider, .125, {BackgroundColor3 = Colors.DarkerAccent})
+            Utilities:Tween(Tab.Divider, .125, {BackgroundColor3 = Colors.Accent}) -- Red when selected
             Utilities:Tween(Tab.TabText, .125, {TextColor3 = Colors.AccentText})
         end
 
@@ -591,11 +610,11 @@ function library:Window(WindowArgs)
                 Parent = SectionArgs.Side == "Left" and Left or Right,
                 BackgroundColor3 = Colors.Secondary,
                 BackgroundTransparency = 1,
-                Size = UDim2.new(0, 361, 0, 36) -- Changed line: increased width from 311 to 361
+                Size = UDim2.new(0, 361, 0, 36)
             }, {
                 Utilities:Create("TextLabel", {
                     Name = "SectionText",
-                    Size = UDim2.new(0, 361, 0, 26), -- Changed line: increased width from 311 to 361
+                    Size = UDim2.new(0, 361, 0, 26),
                     Text = SectionArgs.Text,
                     TextXAlignment = Enum.TextXAlignment.Left,
                     TextSize = 14,
@@ -608,12 +627,12 @@ function library:Window(WindowArgs)
                 Utilities:Create("Frame", {
                     Name = "Divider",
                     Position = UDim2.new(0, 0, 0, 28),
-                    Size = UDim2.new(0, 361, 0, 1), -- Changed line: increased width from 311 to 361
+                    Size = UDim2.new(0, 361, 0, 1),
                     BackgroundColor3 = Colors.Divider
                 }),
                 Utilities:Create("Frame", {
                     Name = "Container",
-                    Size = UDim2.new(0, 361, 0, 0), -- Changed line: increased width from 311 to 361
+                    Size = UDim2.new(0, 361, 0, 0),
                     BackgroundTransparency = 1,
                     Position = UDim2.new(0, 0, 0, 38)
                 }, {
@@ -635,8 +654,8 @@ function library:Window(WindowArgs)
 
             SectionContainer.ChildAdded:Connect(function()
                 SectionY = SectionY + 21
-                Section.Size = UDim2.new(0, 361, 0, SectionY) -- Changed line: increased width from 311 to 361
-                SectionContainer.Size = UDim2.new(0, 361, 0, SectionY) -- Changed line: increased width from 311 to 361
+                Section.Size = UDim2.new(0, 361, 0, SectionY)
+                SectionContainer.Size = UDim2.new(0, 361, 0, SectionY)
             end)
 
             function SectionTable:Check(CheckArgs)
@@ -652,7 +671,7 @@ function library:Window(WindowArgs)
                 local Check = Utilities:Create("Frame", {
                     Name = "Check",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 361, 0, 21), -- Changed line: increased width from 311 to 361
+                    Size = UDim2.new(0, 361, 0, 21),
                     BackgroundTransparency = 1,
                 }, {
                     Utilities:Create("TextButton", {
@@ -682,10 +701,11 @@ function library:Window(WindowArgs)
                             AnchorPoint = Vector2.new(.5, .5),
                             Position = UDim2.new(.5, 0, .5, 0),
                             Size = UDim2.new(0, 12, 0, 12),
-                            BackgroundColor3 = Colors.Secondary
+                            BackgroundColor3 = Colors.InactiveButton -- Black when inactive
                         }),
                         Utilities:Create("UIStroke", {
-                            Color = Colors.Divider
+                            Color = Colors.Divider,
+                            Thickness = 1
                         })
                     })
                 })
@@ -705,7 +725,7 @@ function library:Window(WindowArgs)
                 CheckButton.MouseLeave:Connect(function()
                     if not State then
                         Utilities:Tween(Check.CheckFrame.UIStroke, .125, {Color = Colors.Divider})
-                        Utilities:Tween(Check.CheckFrame.CheckInner, .125, {BackgroundColor3 = Colors.Secondary})
+                        Utilities:Tween(Check.CheckFrame.CheckInner, .125, {BackgroundColor3 = Colors.InactiveButton})
                     end
                 end)
 
@@ -720,10 +740,10 @@ function library:Window(WindowArgs)
 
                     if State then
                         Utilities:Tween(Check.CheckFrame.UIStroke, .125, {Color = Colors.Accent})
-                        Utilities:Tween(Check.CheckFrame.CheckInner, .125, {BackgroundColor3 = Colors.Accent})
+                        Utilities:Tween(Check.CheckFrame.CheckInner, .125, {BackgroundColor3 = Colors.Accent}) -- Red when active
                     else
                         Utilities:Tween(Check.CheckFrame.UIStroke, .125, {Color = Colors.Divider})
-                        Utilities:Tween(Check.CheckFrame.CheckInner, .125, {BackgroundColor3 = Colors.Secondary})
+                        Utilities:Tween(Check.CheckFrame.CheckInner, .125, {BackgroundColor3 = Colors.InactiveButton}) -- Black when inactive
                     end
                 end
 
@@ -742,16 +762,17 @@ function library:Window(WindowArgs)
                 local Button = Utilities:Create("Frame", {
                     Name = "Button",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 361, 0, 21), -- Changed line: increased width from 311 to 361
+                    Size = UDim2.new(0, 361, 0, 21),
                     BackgroundTransparency = 1
                 }, {
                     Utilities:Create("Frame", {
                         Name = "ButtonFrame",
-                        BackgroundColor3 = Colors.Secondary,
+                        BackgroundColor3 = Colors.InactiveButton, -- Black by default
                         Size = UDim2.new(0, 14, 0, 14)
                     }, {
                         Utilities:Create("UIStroke", {
-                            Color = Colors.Divider
+                            Color = Colors.Divider,
+                            Thickness = 1
                         }),
                         Utilities:Create("TextLabel", {
                             Name = "ButtonText",
@@ -781,7 +802,7 @@ function library:Window(WindowArgs)
 
                 Button.ButtonFrame.MouseLeave:Connect(function()
                     Hovering = false
-                    Utilities:Tween(Button.ButtonFrame, .125, {BackgroundColor3 = Colors.Secondary})
+                    Utilities:Tween(Button.ButtonFrame, .125, {BackgroundColor3 = Colors.InactiveButton})
                     Utilities:Tween(Button.ButtonFrame.UIStroke, .125, {Color = Colors.Divider})
                 end)
 
@@ -789,6 +810,7 @@ function library:Window(WindowArgs)
                 Button.ButtonFrame.Size = UDim2.new(0, TextX + 10, 0, 14)
 
                 Button.ButtonFrame.ButtonButton.MouseButton1Down:Connect(function()
+                    Utilities:Tween(Button.ButtonFrame, .1, {BackgroundColor3 = Colors.Accent}) -- Red when pressed
                     Utilities:Tween(Button.ButtonFrame.UIStroke, .1, {Color = Colors.Accent})
                     Utilities:Tween(Button.ButtonFrame.ButtonText, .1, {TextColor3 = Colors.AccentText})
                 end)
@@ -796,8 +818,10 @@ function library:Window(WindowArgs)
                 Button.ButtonFrame.ButtonButton.MouseButton1Up:Connect(function()
                     Utilities:Tween(Button.ButtonFrame.ButtonText, .1, {TextColor3 = Colors.PrimaryText})
                     if Hovering then
+                        Utilities:Tween(Button.ButtonFrame, .125, {BackgroundColor3 = Colors.Hovering})
                         Utilities:Tween(Button.ButtonFrame.UIStroke, .125, {Color = Colors.AccentDivider})
                     else
+                        Utilities:Tween(Button.ButtonFrame, .125, {BackgroundColor3 = Colors.InactiveButton})
                         Utilities:Tween(Button.ButtonFrame.UIStroke, .125, {Color = Colors.Divider})
                     end
                 end)
@@ -841,20 +865,21 @@ function library:Window(WindowArgs)
                 local Slider = Utilities:Create("Frame", {
                     Name = "Slider",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 361, 0, 21), -- Changed line: increased width from 311 to 361
+                    Size = UDim2.new(0, 361, 0, 21),
                     BackgroundTransparency = 1
                 }, {
                     Utilities:Create("Frame", {
                         Name = "SliderOuter",
-                        BackgroundColor3 = Colors.Secondary,
+                        BackgroundColor3 = Colors.InactiveButton, -- Black background
                         Size = UDim2.new(.6, 3, 0, 14)
                     }, {
                         Utilities:Create("UIStroke", {
-                            Color = Colors.AccentDivider
+                            Color = Colors.Divider,
+                            Thickness = 1
                         }),
                         Utilities:Create("Frame", {
                             Name = "SliderInner",
-                            BackgroundColor3 = Colors.DarkerAccent,
+                            BackgroundColor3 = Colors.Accent, -- Red fill
                             Size = UDim2.fromScale(DefaultScale, 1)
                         }),
                         Utilities:Create("TextLabel", {
@@ -898,17 +923,17 @@ function library:Window(WindowArgs)
                 end)
 
                 Slider.SliderOuter.MouseLeave:Connect(function()
-                    Utilities:Tween(Slider.SliderOuter.UIStroke, .125, {Color = Colors.AccentDivider})
-                    Utilities:Tween(Slider.SliderOuter, .125, {BackgroundColor3 = Colors.Secondary})
-                    Utilities:Tween(Slider.SliderOuter.SliderInner, .125, {BackgroundColor3 = Colors.DarkerAccent})
-                end)
-
-                Slider.SliderOuter.SliderButton.MouseButton1Down:Connect(function()
+                    Utilities:Tween(Slider.SliderOuter.UIStroke, .125, {Color = Colors.Divider})
+                    Utilities:Tween(Slider.SliderOuter, .125, {BackgroundColor3 = Colors.InactiveButton})
                     Utilities:Tween(Slider.SliderOuter.SliderInner, .125, {BackgroundColor3 = Colors.Accent})
                 end)
 
-                Slider.SliderOuter.SliderButton.MouseButton1Up:Connect(function()
+                Slider.SliderOuter.SliderButton.MouseButton1Down:Connect(function()
                     Utilities:Tween(Slider.SliderOuter.SliderInner, .125, {BackgroundColor3 = Colors.DarkerAccent})
+                end)
+
+                Slider.SliderOuter.SliderButton.MouseButton1Up:Connect(function()
+                    Utilities:Tween(Slider.SliderOuter.SliderInner, .125, {BackgroundColor3 = Colors.Accent})
                 end)
 
                 local MinSize = 0
@@ -950,7 +975,7 @@ function library:Window(WindowArgs)
                 local Label = Utilities:Create("Frame", {
                     Name = "Label",
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 361, 0, 21), -- Changed line: increased width from 311 to 361
+                    Size = UDim2.new(0, 361, 0, 21),
                     BackgroundTransparency = 1
                 }, {
                     Utilities:Create("TextLabel", {
@@ -959,7 +984,7 @@ function library:Window(WindowArgs)
                         TextColor3 = Info.Color,
                         RichText = true,
                         BackgroundTransparency = 1,
-                        Size = UDim2.new(0, 361, 0, 14), -- Changed line: increased width from 311 to 361
+                        Size = UDim2.new(0, 361, 0, 14),
                         TextXAlignment = Enum.TextXAlignment.Left,
                         TextSize = 13,
                         Font = Enum.Font.SourceSansBold
@@ -995,17 +1020,18 @@ function library:Window(WindowArgs)
                     Name = "Dropdown",
                     BackgroundTransparency = 1,
                     Parent = SectionContainer,
-                    Size = UDim2.new(0, 361, 0, 21) -- Changed line: increased width from 311 to 361
+                    Size = UDim2.new(0, 361, 0, 21)
                 }, {
                     Utilities:Create("Frame", {
                         Name = "DropdownFrame",
                         Size = UDim2.new(.6, 3, 0, 14),
-                        BackgroundColor3 = Colors.Secondary,
+                        BackgroundColor3 = Colors.InactiveButton, -- Black background
                         ClipsDescendants = true,
                         ZIndex = DropdownTable.Index
                     }, {
                         Utilities:Create("UIStroke", {
-                            Color = Colors.AccentDivider
+                            Color = Colors.Divider,
+                            Thickness = 1
                         }),
                         Utilities:Create("TextLabel", {
                             Name = "DropdownText",
@@ -1039,14 +1065,14 @@ function library:Window(WindowArgs)
                         Utilities:Create("Frame", {
                             Name = "GradientHolder",
                             Size = UDim2.new(0, 20, 0, 14),
-                            BackgroundColor3 = Color3.fromRGB(20, 20, 20),
+                            BackgroundColor3 = Colors.InactiveButton,
                             Position = UDim2.new(1, -41, 0, 0),
                             ZIndex = DropdownTable.Index
                         }, {
                             Utilities:Create("UIGradient", {
                                 Color = ColorSequence.new({
-                                    ColorSequenceKeypoint.new(0, Colors.Secondary),
-                                    ColorSequenceKeypoint.new(1, Colors.Secondary),
+                                    ColorSequenceKeypoint.new(0, Colors.InactiveButton),
+                                    ColorSequenceKeypoint.new(1, Colors.InactiveButton),
                                 }),
                                 Transparency = NumberSequence.new({
                                     NumberSequenceKeypoint.new(0, 1),
@@ -1062,7 +1088,8 @@ function library:Window(WindowArgs)
                             ZIndex = DropdownTable.Index
                         }, {
                             Utilities:Create("UIStroke", {
-                                Color = Colors.AccentDivider
+                                Color = Colors.Divider,
+                                Thickness = 1
                             }),
                             Utilities:Create("ImageLabel", {
                                 Name = "DropdownImage",
@@ -1070,6 +1097,7 @@ function library:Window(WindowArgs)
                                 BackgroundTransparency = 1,
                                 Rotation = 0,
                                 Image = getcustomasset("KERNITH/Arrow.png"),
+                                ImageColor3 = Colors.PrimaryText, -- Black arrow
                                 AnchorPoint = Vector2.new(.5, .5),
                                 Position = UDim2.new(.5, 0, .5, 0),
                                 ZIndex = DropdownTable.Index
@@ -1091,7 +1119,7 @@ function library:Window(WindowArgs)
 
                 Dropdown.DropdownFrame.MouseLeave:Connect(function()
                     if not State then
-                        Utilities:Tween(Dropdown.DropdownFrame, .125, {BackgroundColor3 = Colors.Secondary})
+                        Utilities:Tween(Dropdown.DropdownFrame, .125, {BackgroundColor3 = Colors.InactiveButton})
                     end
                 end)
 
@@ -1102,11 +1130,12 @@ function library:Window(WindowArgs)
                     State = bool
 
                     if State then
-                        Utilities:Tween(Dropdown.DropdownFrame, .2, {BackgroundColor3 = Colors.Secondary})
+                        Utilities:Tween(Dropdown.DropdownFrame, .2, {BackgroundColor3 = Colors.Accent}) -- Red when open
                         DropdownContainer.Size = DropdownContainer.Size + UDim2.fromOffset(0, DropdownY)
                         Dropdown.DropdownFrame.Size = Dropdown.DropdownFrame.Size + UDim2.fromOffset(0, DropdownY)
                         DropdownImage.Rotation = 90
                     else
+                        Utilities:Tween(Dropdown.DropdownFrame, .2, {BackgroundColor3 = Colors.InactiveButton}) -- Black when closed
                         DropdownContainer.Size = DropdownContainer.Size - UDim2.fromOffset(0, DropdownY)
                         Dropdown.DropdownFrame.Size = Dropdown.DropdownFrame.Size - UDim2.fromOffset(0, DropdownY)
                         DropdownImage.Rotation = 0
@@ -1135,8 +1164,8 @@ function library:Window(WindowArgs)
                 local function OnPick(v)
                     if Info.Multi then
                         if not table.find(MultiTable, v.DropdownElementText.Text) then
-                            Utilities:Tween(v, .125, {BackgroundTransparency = .95})
-                            Utilities:Tween(v.DropdownElementText, .125, {TextColor3 = Colors.Accent})
+                            Utilities:Tween(v, .125, {BackgroundColor3 = Colors.Accent}) -- Red when selected
+                            Utilities:Tween(v.DropdownElementText, .125, {TextColor3 = Colors.AccentText})
                             table.insert(MultiTable, v.DropdownElementText.Text)
                         else
                             Utilities:Tween(v, .125, {BackgroundTransparency = 1})
@@ -1193,8 +1222,13 @@ function library:Window(WindowArgs)
                         Size = UDim2.new(1, 0, 0, 14),
                         Parent = DropdownContainer,
                         BackgroundTransparency = 1,
+                        BackgroundColor3 = Colors.Secondary, -- Gray background for options
                         ZIndex = DropdownTable.Index
                     }, {
+                        Utilities:Create("UIStroke", {
+                            Color = Colors.Divider,
+                            Thickness = 1
+                        }),
                         Utilities:Create("TextLabel", {
                             Name = "DropdownElementText",
                             Text = str,
@@ -1216,8 +1250,9 @@ function library:Window(WindowArgs)
 
                     DropdownElement.MouseEnter:Connect(function()
                         if not table.find(MultiTable, DropdownElement.DropdownElementText.Text) then
-                            Utilities:Tween(DropdownElement, .125, {BackgroundTransparency = .95})
-                            Utilities:Tween(DropdownElement.DropdownElementText, .125, {TextColor3 = Colors.Accent})
+                            Utilities:Tween(DropdownElement, .125, {BackgroundTransparency = 0})
+                            Utilities:Tween(DropdownElement, .125, {BackgroundColor3 = Colors.Hovering})
+                            Utilities:Tween(DropdownElement.DropdownElementText, .125, {TextColor3 = Colors.AccentText})
                         end
                     end)
 
