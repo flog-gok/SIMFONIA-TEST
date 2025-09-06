@@ -499,7 +499,7 @@ function library:Window(WindowArgs)
             }, {
                 Utilities:Create("UIStroke", {
                     Color = Colors.Divider,
-                    Thickness = 1
+                    Thickness = 2 -- Made thicker for better visibility
                 })
             })
         })
